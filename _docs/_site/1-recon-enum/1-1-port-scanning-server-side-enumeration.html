@@ -1,0 +1,74 @@
+<h2 id="nmap">nmap</h2>
+<hr />
+
+<ul>
+  <li>vpn necesita full connect scan:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -sT -p- --min-rate=1000 -vvvvv 10.10.10.116 -T4 -oA nmap-ipsec2
+</code></pre></div>    </div>
+  </li>
+  <li>quick:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap  -O -sV -Pn -oA nmap/host-quick.txt -v -T4 10.10.10.10
+</code></pre></div>    </div>
+  </li>
+  <li>complete:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -Pn -p-  -oA nmap/full.txt -v -T4 10.10.10.10.
+</code></pre></div>    </div>
+  </li>
+  <li>correrle script default
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -Pn -p 139 -sC -sV  -v -T4 -oA nmap/puerto.txt
+</code></pre></div>    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -Pn -p- -sV --script "vuln and safe" -vvv -T4 -oA sarasa  10.10.10.135
+</code></pre></div>    </div>
+  </li>
+  <li>quick through proxy (no and SYN)
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap  -O -sT -Pn -oA nmap/host-quick.txt -v -T4 10.10.10.10
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="ex-00"><strong>ex 00</strong></h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:# nmap -v -p 80 --scripts all 192.168.31.210  
+</code></pre></div></div>
+
+<h2 id="ex1"><strong>ex1:</strong></h2>
+<p>scan cold fusion web server for a directory traversal vulnerability\</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -v -p 80 --script=http-vuln-cve2010-2861 --scripts-args vulns.showall 192.168.1.210
+</code></pre></div></div>
+
+<h2 id="ex2"><strong>ex2:</strong></h2>
+<p>check for anonymous ftp</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -v -p 21 --script=ftp-anon.nse 192.168.1.200-254
+</code></pre></div></div>
+
+<h2 id="ex3"><strong>ex3:</strong></h2>
+<p>check smb server</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -v -p 139, 445 --script=smb-security-mode 192.168.1.100
+</code></pre></div></div>
+<h2 id="ex4"><strong>ex4:</strong></h2>
+<p>verify  if servers are patched</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nmap -v -p 80 --script=http-vuln-cve2011-3192  --scripts-args vulns.showall  192.168.11.205-210
+</code></pre></div></div>
+
+<h2 id="unicorn-scan">unicorn scan</h2>
+<hr />
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>uniscan -u 10.10.10.10. -qweds
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unicornscan -i tap0 -I -mT $IP:a
+db_nmap -e tap0 -n -v -Pn -sV -sC --version-light -A -p
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>unicornscan -i tap0 -Iv -mU $IP
+db_nmap -e tap0 -n -v -Pn -sV -sC --version-light -A -sU -p
+</code></pre></div></div>
+
+<h2 id="netcat">netcat</h2>
+<hr />
+<p><strong>banner grabbing</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc 192.168.1.2 &lt;port&gt;
+</code></pre></div></div>
+<p><strong>tcp scan</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -vvn -z 10.10.10.10 1-9000
+</code></pre></div></div>
+<p><strong>udp  scan</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -vvn -u -z 10.10.10.10 1-9000
+</code></pre></div></div>

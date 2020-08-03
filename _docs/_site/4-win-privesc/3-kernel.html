@@ -1,0 +1,55 @@
+<p><a href="https://pentestlab.blog/2017/04/24/windows-kernel-exploits/">WPE-02 - Windows Kernel</a></p>
+
+<p>try to search for third party drivers exploits before kernel ones.
+example: USBPcap</p>
+
+<h2 id="discover-patches">discover patches</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wmic qfe get Caption,Description,HotFixID,InstalledOn
+</code></pre></div></div>
+<h2 id="exploit-suggester">exploit suggester</h2>
+
+<h4 id="-watson">| watson</h4>
+<p>https://github.com/rasta-mouse/Watson</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:&gt; Watson.exe
+</code></pre></div></div>
+
+<h4 id="-windows-exploit-suggester---next-generation">| Windows Exploit Suggester - Next Generation</h4>
+<p>https://github.com/bitsadmin/wesng</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wes.py --update
+wes.py systeminfo.txt
+wes.py arctic-systeminfo.txt  --muc-lookup  --exploits-only  -i "Elevation of Privilege"
+</code></pre></div></div>
+
+<h4 id="-windows-exploit-suggester">| Windows Exploit Suggester</h4>
+<p>https://github.com/AonCyberLabs/Windows-Exploit-Suggester</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python /home/nikhil/scripts/windows-exploit-suggester.py -d 2016-07-02-mssb.xls -i systeminfo -l
+</code></pre></div></div>
+<p>-l : show only local exploits</p>
+
+<h2 id="compiling-in-windows">compiling in windows</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\Program Files\mingw-w64\i686-7.2.0-posix-dwarf-rt_v5-rev1&gt; mingw-w64.bat
+
+C:\&gt; gcc 41542.c -o exploit.exe
+</code></pre></div></div>
+
+<h2 id="list">list</h2>
+<ul>
+  <li>MS16-135</li>
+  <li>MS16-032</li>
+  <li>MS15-051</li>
+  <li>MS14-058</li>
+  <li>MS16-016</li>
+  <li>MS14-040</li>
+  <li>MS14-002</li>
+  <li>MS10-092</li>
+  <li>MS10-015</li>
+  <li>MS14-002</li>
+  <li>MS15-061</li>
+  <li>MS11-062</li>
+  <li>MS11-080</li>
+  <li>MS15-076</li>
+  <li>MS16-075</li>
+  <li>MS15-010</li>
+  <li>MS11-046</li>
+</ul>

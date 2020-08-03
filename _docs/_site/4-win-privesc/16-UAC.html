@@ -1,0 +1,16 @@
+<p>If this setting is enabled, we could craft an MSI file and run it to elevate our privileges.
+Similarly, on Linux-based systems we can search for SUID 489 files.</p>
+
+<p>we can switch to a high integrity level (if we are admin)</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>powershell.exe Start-Process cmd.exe -Verb runAs
+</code></pre></div></div>
+
+<h1 id="example-with-fodhelperexe">example with fodhelper.exe</h1>
+<hr />
+<p>we can check forthis fodhelpers  permissions inside its manifest</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sigcheck.exe -a -m C:\Windows\System32\fodhelper.exe
+</code></pre></div></div>
+
+<p>lanzamos procmon.exe  filtramos por reg  y vemos si busca algun registro que no existe en HKEY_CURRENT_USER</p>
+
+<p>CAMBIAMOS EL REGISTRO Y LE MANDAMOS UN cmd.exe  con high integrity level</p>

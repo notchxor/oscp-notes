@@ -1,0 +1,192 @@
+<h1 id="windows">WINDOWS</h1>
+
+<h2 id="arctic">Arctic</h2>
+<ul>
+  <li>initial: coldfusion arbitrary file upload</li>
+  <li>privesc: local_exploit_suggester -&gt; <strong>ms10_092</strong></li>
+</ul>
+
+<h2 id="bastard">Bastard</h2>
+<ul>
+  <li>initial: drupal</li>
+  <li>privesc: <strong>ms15-051</strong></li>
+</ul>
+
+<h2 id="bastion">Bastion</h2>
+<ul>
+  <li>initial: smb open share with backup, dump sam file</li>
+  <li>privesc: <strong>stored credentials</strong> by mRemoteNG</li>
+</ul>
+
+<h2 id="blue">blue</h2>
+<p><strong>ms17_010_eternalblue</strong></p>
+
+<h1 id="bounty">bounty</h1>
+<ul>
+  <li>intial: <strong>web.config</strong> upload with reverse_shell</li>
+  <li>privesc: <strong>ms16-014</strong>, or <strong>ms10_092</strong></li>
+</ul>
+
+<h1 id="conceal">conceal</h1>
+<ul>
+  <li>initial: reverseshell with ftp + /upload path</li>
+  <li>privesc: <strong>juicy potato</strong></li>
+  <li>privesc2: <strong>CVE-2018-8440</strong> ALPC Task Scheduler</li>
+</ul>
+
+<h1 id="devel">Devel</h1>
+<ul>
+  <li>initial: anonymous <strong>ftp</strong></li>
+  <li>privesc: <strong>ms10_015</strong></li>
+</ul>
+
+<h2 id="grandpa">grandpa</h2>
+<ul>
+  <li>intial: iis6 remote exploit <strong>​CVE-2017-7269</strong></li>
+  <li>privesc: <strong>ms14_070_tcpip_ioctl​</strong></li>
+</ul>
+
+<h2 id="granny">granny</h2>
+<ul>
+  <li>initial: iis6 remote exploit <strong>CVE-2017-7269​</strong></li>
+  <li>privesc: <strong>ms15_051_client_copy_image​</strong></li>
+</ul>
+
+<h2 id="irced">irced</h2>
+<ul>
+  <li>initial: Unreal IRCD <strong>rce</strong></li>
+  <li>privesc: <strong>SUID</strong></li>
+</ul>
+
+<h2 id="jerry">jerry</h2>
+<ul>
+  <li>initial: tomcat, <strong>default credentials</strong> , deploy webshell to panel</li>
+  <li>privesc: <strong>credentials</strong> with mimikatz</li>
+</ul>
+
+<h2 id="legacy">legacy</h2>
+<ul>
+  <li>initial + root: <strong>ms08_067_netapi</strong></li>
+</ul>
+
+<h2 id="optimum">optimum</h2>
+<ul>
+  <li>initial: rejetto exploit</li>
+  <li>privesc: <strong>ms16_032_secondary_logon_handle_privesc</strong></li>
+</ul>
+
+<h2 id="poison">poison</h2>
+<ul>
+  <li>initial: <strong>log poisoning</strong> inject phpcode in User-agent</li>
+  <li>privesc: vnc mal configurado con rootshell abierta</li>
+</ul>
+
+<h2 id="silo">silo</h2>
+<ul>
+  <li>initial root: oracle database <strong>odat</strong></li>
+</ul>
+
+<h1 id="linux">LINUX</h1>
+
+<h2 id="bashed">bashed</h2>
+<ul>
+  <li>initial: tienen una webshell….</li>
+  <li>privesc-1: sudo -l, can run anything as scriptmannager -&gt;
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo -u scriptmanager bash -i
+scriptmanager:
+</code></pre></div>    </div>
+  </li>
+  <li>privesc-2:
+crontab runs as root test.py wich is writable by scriptmanager</li>
+</ul>
+
+<h2 id="beep">Beep</h2>
+<ul>
+  <li>initial:<strong>LFI</strong> by elastix</li>
+  <li>privesc: elastix runs as root</li>
+</ul>
+
+<h2 id="cronos">cronos</h2>
+<ul>
+  <li>initial: dns magic + <strong>SQLi</strong> in login admin panel  +  <strong>command injection</strong> in welcome.php</li>
+  <li>privesc: weak <strong>CRON</strong></li>
+</ul>
+
+<h1 id="friendzone">Friendzone</h1>
+<ul>
+  <li>initial: samba <strong>stored creds</strong> + <strong>LFI</strong> + <strong>RCE</strong></li>
+  <li>privesc: <strong>Cron</strong> runs a python module with permissions 777, <strong>module hijacking</strong></li>
+</ul>
+
+<h2 id="kotarak">kotarak</h2>
+<ul>
+  <li>initial: fuzzing web proxy to access <strong>stored credentials</strong> and use that to access apache tomact <strong>admin panel</strong> and upload a webshell</li>
+  <li>privesc: wget vulnerability 1.16</li>
+</ul>
+
+<h2 id="lame">lame</h2>
+<ul>
+  <li>initial + root: samba <strong>CVE-2007-2447</strong></li>
+</ul>
+
+<h2 id="nibble">nibble</h2>
+<ul>
+  <li>initial : <strong>file upload</strong> nibble blog</li>
+  <li>privesc: <strong>sudo -l</strong> + script falopa</li>
+</ul>
+
+<h2 id="nineveh">Nineveh</h2>
+<ul>
+  <li>initial: bruteforce phplitteadmin</li>
+  <li>privesc: chkroot exploit</li>
+</ul>
+
+<h2 id="node">node</h2>
+<p>hacerla denuevo</p>
+
+<h2 id="sense">sense</h2>
+<ul>
+  <li>initial root: gobuster <strong>stored credentials</strong> abiertas  + pfsense exploit modificado</li>
+</ul>
+
+<h2 id="shocker">shocker</h2>
+<ul>
+  <li>initial: <strong>shellshock</strong></li>
+  <li>privesc: <strong>sudo -l</strong></li>
+</ul>
+
+<h2 id="solidstate">solidstate</h2>
+<ul>
+  <li>initial : apache james <strong>rce</strong></li>
+  <li>privesc: <strong>cron</strong> mal configurado</li>
+</ul>
+
+<h2 id="sunday">sunday</h2>
+<ul>
+  <li>initial: <strong>finger</strong> enum + <strong>ssh bruteforcing</strong></li>
+  <li>privesc: <strong>cron</strong> + <strong>crack backup file</strong> + two users needed</li>
+</ul>
+
+<h2 id="swagshop">swagshop</h2>
+<ul>
+  <li>intial: magento <strong>rce</strong> exploit</li>
+  <li>privesc: vi <strong>GTFObins</strong></li>
+</ul>
+
+<h2 id="tartarsauce">tartarsauce</h2>
+<ul>
+  <li>initial: wordpress <strong>rfi</strong></li>
+  <li>privesc: <strong>tar GTFObins</strong> + custom script + <strong>cron</strong></li>
+</ul>
+
+<h2 id="valentine">valentine</h2>
+<ul>
+  <li>intial: <strong>heartbleed</strong></li>
+  <li>privesc: tmux open</li>
+</ul>
+
+<h2 id="popcorn">popcorn</h2>
+<ul>
+  <li>initial: <strong>sqli</strong> +/o <strong>file upload</strong></li>
+  <li>privesc: <strong>kernel full nelson</strong> / <strong>PAM privesc motd</strong></li>
+</ul>

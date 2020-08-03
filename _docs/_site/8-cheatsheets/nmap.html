@@ -1,0 +1,78 @@
+<ul>
+  <li>
+    <p>Nmap stealth scan using SYN
+<code class="highlighter-rouge">nmap -sS $ip</code></p>
+  </li>
+  <li>
+    <p>Nmap stealth scan using FIN
+<code class="highlighter-rouge">nmap -sF $ip</code></p>
+  </li>
+  <li>
+    <p>Nmap Banner Grabbing
+<code class="highlighter-rouge">nmap -sV -sT $ip</code></p>
+  </li>
+  <li>
+    <p>Nmap OS Fingerprinting
+<code class="highlighter-rouge">nmap -O $ip</code></p>
+  </li>
+  <li>
+    <p>Nmap Regular Scan:
+<code class="highlighter-rouge">nmap $ip/24</code></p>
+  </li>
+  <li>
+    <p>Enumeration Scan
+<code class="highlighter-rouge">nmap -p 1-65535 -sV -sS -A -T4 $ip/24 -oN nmap.txt</code></p>
+  </li>
+  <li>
+    <p>Enumeration Scan All Ports TCP / UDP and output to a txt file
+<code class="highlighter-rouge">nmap -oN nmap2.txt -v -sU -sS -p- -A -T4 $ip</code></p>
+  </li>
+  <li>
+    <p>Nmap output to a file:
+<code class="highlighter-rouge">nmap -oN nmap.txt -p 1-65535 -sV -sS -A -T4 $ip/24</code></p>
+  </li>
+  <li>
+    <p>Quick Scan:
+<code class="highlighter-rouge">nmap -T4 -F $ip/24</code></p>
+  </li>
+  <li>
+    <p>Quick Scan Plus:
+<code class="highlighter-rouge">nmap -sV -T4 -O -F --version-light $ip/24</code></p>
+  </li>
+  <li>
+    <p>Quick traceroute
+<code class="highlighter-rouge">nmap -sn --traceroute $ip</code></p>
+  </li>
+  <li>
+    <p>All TCP and UDP Ports
+<code class="highlighter-rouge">nmap -v -sU -sS -p- -A -T4 $ip</code></p>
+  </li>
+  <li>
+    <p>Intense Scan:
+<code class="highlighter-rouge">nmap -T4 -A -v $ip</code></p>
+  </li>
+  <li>
+    <p>Intense Scan Plus UDP
+<code class="highlighter-rouge">nmap -sS -sU -T4 -A -v $ip/24</code></p>
+  </li>
+  <li>
+    <p>Intense Scan ALL TCP Ports
+<code class="highlighter-rouge">nmap -p 1-65535 -T4 -A -v $ip/24</code></p>
+  </li>
+  <li>
+    <p>Intense Scan - No Ping
+<code class="highlighter-rouge">nmap -T4 -A -v -Pn $ip/24</code></p>
+  </li>
+  <li>
+    <p>Ping scan
+<code class="highlighter-rouge">nmap -sn $ip/24</code></p>
+  </li>
+  <li>
+    <p>Slow Comprehensive Scan
+<code class="highlighter-rouge">nmap -sS -sU -T4 -A -v -PE -PP -PS80,443 -PA3389 -PU40125 -PY -g 53 --script "default or (discovery and safe)" $ip/24</code></p>
+  </li>
+  <li>
+    <p>Scan with Active connect in order to weed out any spoofed ports designed to troll you
+<code class="highlighter-rouge">nmap -p1-65535 -A -T5 -sT $ip</code></p>
+  </li>
+</ul>

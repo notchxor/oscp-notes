@@ -1,0 +1,88 @@
+<h1 id="wireshark">WIRESHARK</h1>
+<hr />
+
+<h2 id="intro">Intro</h2>
+
+<p>use libpcap (linux) or winpcap(win) libraries.</p>
+
+<h2 id="capture-and-display-filters">capture and display filters</h2>
+
+<p>capture: to capture only that<br />
+display: to display only what i want</p>
+
+<h2 id="follow-tcp-stream">Follow tcp stream</h2>
+<p>right click and “ follow tcp stream”</p>
+
+<h1 id="tcpdump">TCPDump</h1>
+<hr />
+
+<ul>
+  <li>read:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcpdump -r password.pcap
+</code></pre></div>    </div>
+  </li>
+  <li>filtering:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> tcpdump -n -r password.pcap | awk -F " " '{print $3}' | sort -u | head
+</code></pre></div>    </div>
+  </li>
+  <li>filtering for src:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcpdump -n src host 172.16.40.10 -r password.pcap
+</code></pre></div>    </div>
+  </li>
+  <li>filtering for host:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcpdump -n dst host 172.16.40.10 -r password.pcap
+</code></pre></div>    </div>
+  </li>
+  <li>filtering  for port:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcpdum -n port 81 -r password.pcap
+</code></pre></div>    </div>
+  </li>
+  <li>Dumping in hex:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> tcpdump -nX -r password.pcap
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h2 id="advance-header-filtering">Advance header filtering</h2>
+<p>we want to display only the data packets which have the psh and ack flags turned on, these are defined in the 14th byte in the tcp header
+CEUAPRSF -&gt; A and P are ack y push, the binary would be 00011000 which is 24 in decimal.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali: tcpdump -A -n ' tcp[13]=24' -r password.pcap
+</code></pre></div></div>
+
+<h2 id="20-listen-to-your-interface">2.0 Listen to your interface</h2>
+
+<p>listening for outgoing info</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tcpdump -i eth0
+
+</code></pre></div></div>
+
+<p>Discover active IPs usign ARP on the network:
+```arp-scan $ip/24</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+
+Netcat port Scanning
+```nc -nvv -w 1 -z $ip 3388-3390
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> nc -v -z 10.0.3.1 1-65000 &gt; file.txt 2&gt;&amp;1
+</code></pre></div></div>
+<p>Discover active IPs usign ARP on the network:
+```arp-scan $ip/24</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+Discover who else is on the network
+``` netdiscover
+</code></pre></div></div>
+
+<p>Discover IP Mac and Mac vendors from ARP
+```netdiscover -r $ip/24</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+## 2.4 Internal Infrastructure Mapping
+
+### ping gateway
+</code></pre></div></div>
+<p>nmap -sn -v -PE 192.168.*.1</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+### Net discover
+</code></pre></div></div>
+<p>netdiscover -i eth0  -r 10.10.10.0/24 -c 20
+```</p>

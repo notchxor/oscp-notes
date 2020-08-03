@@ -1,0 +1,91 @@
+<h1 id="preparation">preparation</h1>
+<p>You will need to login to your proctoring session 15 minutes prior to the scheduled start of your exam.
+Your exam connectivity pack and credentials will not be sent until you have completed the pre-exam steps</p>
+
+<h2 id="proctor-steps">proctor steps</h2>
+<ul>
+  <li>The proctor will ask you to confirm that you meet the technical requirements for the exam</li>
+  <li>Your identity will be verified by holding up a valid government-issued ID to the webcam</li>
+  <li>The proctor may ask questions in the Proctoring tool chat window</li>
+  <li>You will be asked to scan the room and your surroundings with your webcam</li>
+  <li>The proctor will ask you to share all your screens and display all running programs</li>
+  <li>Once connected to the exam VPN, the proctor will verify you are only connected to the exam VPN and will ask you to run the troubleshooting.sh script, which is included in the VPN connectivity package</li>
+</ul>
+
+<h2 id="faqs">faqs</h2>
+<ul>
+  <li>You cant record your screen</li>
+  <li>podes ver mensajes en el celu, pero poco, si va a ser largo pedite un break</li>
+</ul>
+
+<h1 id="time">time</h1>
+<p>23:45 desde que empezas, yo terminaria 12:45 del 26</p>
+
+<h1 id="documentation">Documentation</h1>
+<p>all steps, commands issued, and console output in the form of a penetration test report.</p>
+
+<h1 id="exploit-code">Exploit Code</h1>
+
+<p>If you have modified an exploit, you should include:</p>
+
+<ul>
+  <li>The modified exploit code</li>
+  <li>The URL to the original exploit code</li>
+  <li>The command used to generate any shellcode (if applicable)</li>
+  <li>Highlighted changes you have made</li>
+  <li>An explanation of why those changes were made</li>
+</ul>
+
+<h1 id="proofs">Proofs</h1>
+<p>ipconfig or ifconfig
+cat or type proof.txt and local from an account</p>
+<ul>
+  <li>root</li>
+  <li>SYSTEM user</li>
+  <li>Administrator user</li>
+  <li>User with Administrator privileges</li>
+</ul>
+
+<p>root.txt is in every box, local.tx can only be found on certain machines</p>
+
+<p>upload them to the panel</p>
+
+<h1 id="restrictions">Restrictions</h1>
+<ul>
+  <li>spoofing(ip,arp,dns,nbns,etc)</li>
+  <li>comercial tools</li>
+  <li>automatic explotation tools (db_autopwn,browser_Autopwn,sqlmap,etc)</li>
+</ul>
+
+<h1 id="metasploit">Metasploit</h1>
+<p>only 1 target  but you can use</p>
+<ul>
+  <li>multi handler</li>
+  <li>msfvenom</li>
+  <li>pattern_create.rb</li>
+  <li>pattern_offset.rb</li>
+</ul>
+
+<h1 id="reverts">Reverts</h1>
+<p>You have a limit of 24 reverts.</p>
+
+<h1 id="submission-instructions">submission instructions</h1>
+<ul>
+  <li>Your exam report is in PDF format</li>
+  <li>Your PDF has been archived into a password-protected .7z file with your osid as password
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>7z a OSCP-OS-XXXXX-Exam-Report.7z -pOS-XXXXX OSCP-OS-XXXXX-Exam-Report.pdf
+</code></pre></div>    </div>
+  </li>
+  <li>You used your OSID as part of the name of your .7z file</li>
+  <li>You have uploaded your .7z file to https://upload.offsec.com</li>
+  <li>You have emailed the link from the upload page to “oscp AT offensive-security DOT com”</li>
+  <li>file name OSCP-OS-XXXXX-Exam-Report.pd</li>
+  <li>After the file has been submitted, you will be presented with a “File uploaded!” page where a link to your exam report will be displayed. You must email the displayed URL to “oscp AT offensive-security DOT com” within 24 hours of completion of the exam.</li>
+</ul>
+
+<h2 id="what-the-exam-machines-are-like">What the Exam Machines are like</h2>
+<p>1x10 pointer: this is easy boot to root machine. There will be a lot of ports open similar to Metasploitable but look for the unique service in a unique port. This took me 10 mins.</p>
+
+<p>2x20 pointer: These will be similar to HTB machines such as October, Popcorn, Shocker, Beep.</p>
+
+<p>2x25 pointer: One is Buffer Overflow and the other is a slightly harder, rabbit holed filled machine. Maybe Giddy, Jeeves.</p>

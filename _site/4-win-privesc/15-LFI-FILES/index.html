@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>LFI files | OSCP Notes</title>
+<meta name="generator" content="Jekyll v3.8.7" />
+<meta property="og:title" content="LFI files" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="C:\Apache\conf\httpd.conf C:\Apache\logs\access.log C:\Apache\logs\error.log C:\Apache2\conf\httpd.conf C:\Apache2\logs\access.log C:\Apache2\logs\error.log C:\Apache22\conf\httpd.conf C:\Apache22\logs\access.log C:\Apache22\logs\error.log C:\Apache24\conf\httpd.conf C:\Apache24\logs\access.log C:\Apache24\logs\error.log C:\Documents and Settings\Administrator\NTUser.dat C:\php\php.ini C:\php4\php.ini C:\php5\php.ini C:\php7\php.ini C:\Program Files (x86)\Apache Group\Apache\conf\httpd.conf C:\Program Files (x86)\Apache Group\Apache\logs\access.log C:\Program Files (x86)\Apache Group\Apache\logs\error.log C:\Program Files (x86)\Apache Group\Apache2\conf\httpd.conf C:\Program Files (x86)\Apache Group\Apache2\logs\access.log C:\Program Files (x86)\Apache Group\Apache2\logs\error.log c:\Program Files (x86)\php\php.ini C:\Program Files\Apache Group\Apache\conf\httpd.conf C:\Program Files\Apache Group\Apache\conf\logs\access.log C:\Program Files\Apache Group\Apache\conf\logs\error.log C:\Program Files\Apache Group\Apache2\conf\httpd.conf C:\Program Files\Apache Group\Apache2\conf\logs\access.log C:\Program Files\Apache Group\Apache2\conf\logs\error.log C:\Program Files\FileZilla Server\FileZilla Server.xml C:\Program Files\MySQL\my.cnf C:\Program Files\MySQL\my.ini C:\Program Files\MySQL\MySQL Server 5.0\my.cnf C:\Program Files\MySQL\MySQL Server 5.0\my.ini C:\Program Files\MySQL\MySQL Server 5.1\my.cnf C:\Program Files\MySQL\MySQL Server 5.1\my.ini C:\Program Files\MySQL\MySQL Server 5.5\my.cnf C:\Program Files\MySQL\MySQL Server 5.5\my.ini C:\Program Files\MySQL\MySQL Server 5.6\my.cnf C:\Program Files\MySQL\MySQL Server 5.6\my.ini C:\Program Files\MySQL\MySQL Server 5.7\my.cnf C:\Program Files\MySQL\MySQL Server 5.7\my.ini C:\Program Files\php\php.ini C:\Users\Administrator\NTUser.dat C:\Windows\debug\NetSetup.LOG C:\Windows\Panther\Unattend\Unattended.xml C:\Windows\Panther\Unattended.xml C:\Windows\php.ini C:\Windows\repair\SAM C:\Windows\repair\system C:\Windows\System32\config\AppEvent.evt C:\Windows\System32\config\RegBack\SAM C:\Windows\System32\config\RegBack\system C:\Windows\System32\config\SAM C:\Windows\System32\config\SecEvent.evt C:\Windows\System32\config\SysEvent.evt C:\Windows\System32\config\SYSTEM C:\Windows\System32\drivers\etc\hosts C:\Windows\System32\winevt\Logs\Application.evtx C:\Windows\System32\winevt\Logs\Security.evtx C:\Windows\System32\winevt\Logs\System.evtx C:\Windows\win.ini C:\xampp\apache\conf\extra\httpd-xampp.conf C:\xampp\apache\conf\httpd.conf C:\xampp\apache\logs\access.log C:\xampp\apache\logs\error.log C:\xampp\FileZillaFTP\FileZilla Server.xml C:\xampp\MercuryMail\MERCURY.INI C:\xampp\mysql\bin\my.ini C:\xampp\php\php.ini C:\xampp\security\webdav.htpasswd C:\xampp\sendmail\sendmail.ini C:\xampp\tomcat\conf\server.xml" />
+<meta property="og:description" content="C:\Apache\conf\httpd.conf C:\Apache\logs\access.log C:\Apache\logs\error.log C:\Apache2\conf\httpd.conf C:\Apache2\logs\access.log C:\Apache2\logs\error.log C:\Apache22\conf\httpd.conf C:\Apache22\logs\access.log C:\Apache22\logs\error.log C:\Apache24\conf\httpd.conf C:\Apache24\logs\access.log C:\Apache24\logs\error.log C:\Documents and Settings\Administrator\NTUser.dat C:\php\php.ini C:\php4\php.ini C:\php5\php.ini C:\php7\php.ini C:\Program Files (x86)\Apache Group\Apache\conf\httpd.conf C:\Program Files (x86)\Apache Group\Apache\logs\access.log C:\Program Files (x86)\Apache Group\Apache\logs\error.log C:\Program Files (x86)\Apache Group\Apache2\conf\httpd.conf C:\Program Files (x86)\Apache Group\Apache2\logs\access.log C:\Program Files (x86)\Apache Group\Apache2\logs\error.log c:\Program Files (x86)\php\php.ini C:\Program Files\Apache Group\Apache\conf\httpd.conf C:\Program Files\Apache Group\Apache\conf\logs\access.log C:\Program Files\Apache Group\Apache\conf\logs\error.log C:\Program Files\Apache Group\Apache2\conf\httpd.conf C:\Program Files\Apache Group\Apache2\conf\logs\access.log C:\Program Files\Apache Group\Apache2\conf\logs\error.log C:\Program Files\FileZilla Server\FileZilla Server.xml C:\Program Files\MySQL\my.cnf C:\Program Files\MySQL\my.ini C:\Program Files\MySQL\MySQL Server 5.0\my.cnf C:\Program Files\MySQL\MySQL Server 5.0\my.ini C:\Program Files\MySQL\MySQL Server 5.1\my.cnf C:\Program Files\MySQL\MySQL Server 5.1\my.ini C:\Program Files\MySQL\MySQL Server 5.5\my.cnf C:\Program Files\MySQL\MySQL Server 5.5\my.ini C:\Program Files\MySQL\MySQL Server 5.6\my.cnf C:\Program Files\MySQL\MySQL Server 5.6\my.ini C:\Program Files\MySQL\MySQL Server 5.7\my.cnf C:\Program Files\MySQL\MySQL Server 5.7\my.ini C:\Program Files\php\php.ini C:\Users\Administrator\NTUser.dat C:\Windows\debug\NetSetup.LOG C:\Windows\Panther\Unattend\Unattended.xml C:\Windows\Panther\Unattended.xml C:\Windows\php.ini C:\Windows\repair\SAM C:\Windows\repair\system C:\Windows\System32\config\AppEvent.evt C:\Windows\System32\config\RegBack\SAM C:\Windows\System32\config\RegBack\system C:\Windows\System32\config\SAM C:\Windows\System32\config\SecEvent.evt C:\Windows\System32\config\SysEvent.evt C:\Windows\System32\config\SYSTEM C:\Windows\System32\drivers\etc\hosts C:\Windows\System32\winevt\Logs\Application.evtx C:\Windows\System32\winevt\Logs\Security.evtx C:\Windows\System32\winevt\Logs\System.evtx C:\Windows\win.ini C:\xampp\apache\conf\extra\httpd-xampp.conf C:\xampp\apache\conf\httpd.conf C:\xampp\apache\logs\access.log C:\xampp\apache\logs\error.log C:\xampp\FileZillaFTP\FileZilla Server.xml C:\xampp\MercuryMail\MERCURY.INI C:\xampp\mysql\bin\my.ini C:\xampp\php\php.ini C:\xampp\security\webdav.htpasswd C:\xampp\sendmail\sendmail.ini C:\xampp\tomcat\conf\server.xml" />
+<link rel="canonical" href="http://localhost:4000/4-win-privesc/15-LFI-FILES/" />
+<meta property="og:url" content="http://localhost:4000/4-win-privesc/15-LFI-FILES/" />
+<meta property="og:site_name" content="OSCP Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-03T20:23:57+00:00" />
+<script type="application/ld+json">
+{"@type":"Article","url":"http://localhost:4000/4-win-privesc/15-LFI-FILES/","headline":"LFI files","dateModified":"2020-08-03T20:23:57+00:00","datePublished":"2020-08-03T20:23:57+00:00","description":"C:\\Apache\\conf\\httpd.conf C:\\Apache\\logs\\access.log C:\\Apache\\logs\\error.log C:\\Apache2\\conf\\httpd.conf C:\\Apache2\\logs\\access.log C:\\Apache2\\logs\\error.log C:\\Apache22\\conf\\httpd.conf C:\\Apache22\\logs\\access.log C:\\Apache22\\logs\\error.log C:\\Apache24\\conf\\httpd.conf C:\\Apache24\\logs\\access.log C:\\Apache24\\logs\\error.log C:\\Documents and Settings\\Administrator\\NTUser.dat C:\\php\\php.ini C:\\php4\\php.ini C:\\php5\\php.ini C:\\php7\\php.ini C:\\Program Files (x86)\\Apache Group\\Apache\\conf\\httpd.conf C:\\Program Files (x86)\\Apache Group\\Apache\\logs\\access.log C:\\Program Files (x86)\\Apache Group\\Apache\\logs\\error.log C:\\Program Files (x86)\\Apache Group\\Apache2\\conf\\httpd.conf C:\\Program Files (x86)\\Apache Group\\Apache2\\logs\\access.log C:\\Program Files (x86)\\Apache Group\\Apache2\\logs\\error.log c:\\Program Files (x86)\\php\\php.ini C:\\Program Files\\Apache Group\\Apache\\conf\\httpd.conf C:\\Program Files\\Apache Group\\Apache\\conf\\logs\\access.log C:\\Program Files\\Apache Group\\Apache\\conf\\logs\\error.log C:\\Program Files\\Apache Group\\Apache2\\conf\\httpd.conf C:\\Program Files\\Apache Group\\Apache2\\conf\\logs\\access.log C:\\Program Files\\Apache Group\\Apache2\\conf\\logs\\error.log C:\\Program Files\\FileZilla Server\\FileZilla Server.xml C:\\Program Files\\MySQL\\my.cnf C:\\Program Files\\MySQL\\my.ini C:\\Program Files\\MySQL\\MySQL Server 5.0\\my.cnf C:\\Program Files\\MySQL\\MySQL Server 5.0\\my.ini C:\\Program Files\\MySQL\\MySQL Server 5.1\\my.cnf C:\\Program Files\\MySQL\\MySQL Server 5.1\\my.ini C:\\Program Files\\MySQL\\MySQL Server 5.5\\my.cnf C:\\Program Files\\MySQL\\MySQL Server 5.5\\my.ini C:\\Program Files\\MySQL\\MySQL Server 5.6\\my.cnf C:\\Program Files\\MySQL\\MySQL Server 5.6\\my.ini C:\\Program Files\\MySQL\\MySQL Server 5.7\\my.cnf C:\\Program Files\\MySQL\\MySQL Server 5.7\\my.ini C:\\Program Files\\php\\php.ini C:\\Users\\Administrator\\NTUser.dat C:\\Windows\\debug\\NetSetup.LOG C:\\Windows\\Panther\\Unattend\\Unattended.xml C:\\Windows\\Panther\\Unattended.xml C:\\Windows\\php.ini C:\\Windows\\repair\\SAM C:\\Windows\\repair\\system C:\\Windows\\System32\\config\\AppEvent.evt C:\\Windows\\System32\\config\\RegBack\\SAM C:\\Windows\\System32\\config\\RegBack\\system C:\\Windows\\System32\\config\\SAM C:\\Windows\\System32\\config\\SecEvent.evt C:\\Windows\\System32\\config\\SysEvent.evt C:\\Windows\\System32\\config\\SYSTEM C:\\Windows\\System32\\drivers\\etc\\hosts C:\\Windows\\System32\\winevt\\Logs\\Application.evtx C:\\Windows\\System32\\winevt\\Logs\\Security.evtx C:\\Windows\\System32\\winevt\\Logs\\System.evtx C:\\Windows\\win.ini C:\\xampp\\apache\\conf\\extra\\httpd-xampp.conf C:\\xampp\\apache\\conf\\httpd.conf C:\\xampp\\apache\\logs\\access.log C:\\xampp\\apache\\logs\\error.log C:\\xampp\\FileZillaFTP\\FileZilla Server.xml C:\\xampp\\MercuryMail\\MERCURY.INI C:\\xampp\\mysql\\bin\\my.ini C:\\xampp\\php\\php.ini C:\\xampp\\security\\webdav.htpasswd C:\\xampp\\sendmail\\sendmail.ini C:\\xampp\\tomcat\\conf\\server.xml","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/siteicon.png"}},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+		<link type="application/atom+xml" rel="alternate" href="http://localhost:4000/feed.xml" title="OSCP Notes" />
+
+		<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Merriweather:400,400italic,700,700italic|Open+Sans:400,400italic,600,600italic,700,700italic|Inconsolata:400,700">
+		<link rel="stylesheet" href="/css/main.css">
+		<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+		<link rel="icon" type="image/png" href="/touch-icon.png" sizes="192x192">
+		<link rel="icon" type="image/png" href="/images/favicon.png">
+
+		
+	</head>
+
+	<body>
+		<header>
+			<h1>
+				<a href="/"><img src="/images/emblem.svg" width="40" height="40" alt="OSCP Notes logo"></a>
+				OSCP Notes
+				<button type="button" class="open-nav" id="open-nav"></button>
+			</h1>
+
+			<form action="/search/" method="get">
+				<input type="text" name="q" id="search-input" placeholder="Search" autofocus>
+				<input type="submit" value="Search" style="display: none;">
+			</form>
+
+			<nav class="full-navigation">
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/">Hack The Planet</a>
+					</li>
+				</ul>
+
+				<ul>
+					
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/0-basics/1-network-basics/">basics</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/0-basics/1-network-basics/">network basics</a></li>
+								
+									<li class="nav-item "><a href="/0-basics/2-metasploit-basics/">metasploit basics</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/1-recon-enum/1-0-passive-recon/">enum</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-0-passive-recon/">passive recon</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-1-port-scanning-server-side-enumeration/">PORT SCANNING</a></li>
+								
+									<li class="nav-item "><a href="/1-recon-enum/1-3-common-ports/">COMMON PORTS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/2-web/0-initial-enumeration/">web</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/2-web/0-initial-enumeration/">initial methodology</a></li>
+								
+									<li class="nav-item "><a href="/2-web/LFI-RFI/">Local and Remote file inclusion</a></li>
+								
+									<li class="nav-item "><a href="/2-web/cms/">CMSs</a></li>
+								
+									<li class="nav-item "><a href="/2-web/command-injection/">command injection</a></li>
+								
+									<li class="nav-item "><a href="/2-web/csrf/">CSRF</a></li>
+								
+									<li class="nav-item "><a href="/2-web/sqli/">SQL Injections</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssl/">ssl</a></li>
+								
+									<li class="nav-item "><a href="/2-web/ssrf/">ssrf</a></li>
+								
+									<li class="nav-item "><a href="/2-web/upload-bypass/">upload-bypass</a></li>
+								
+									<li class="nav-item "><a href="/2-web/verb-tampering/">verb tampering</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xee/">XXE</a></li>
+								
+									<li class="nav-item "><a href="/2-web/xss/">XSS</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/3-Exploiting/1-webshells/">exploiting</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/3-Exploiting/1-webshells/">webshells</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/2-shellcodes-compiling-deploying/">shellcodes , compiling and deploying</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/3-bypassing-AV/">bypassing AV</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/4-databases/">databases</a></li>
+								
+									<li class="nav-item "><a href="/3-Exploiting/6-reverse-shells/">Reverse Shells</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level current">
+							
+							<a href="/4-win-privesc/1-initial/">win privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/4-win-privesc/1-initial/">initial</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/10-always-install-elevated/">always install elevated</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/11-secondary-logon-ms16-032/">secondary logon handle</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/12-insecure-registry/">insecure registry permissions</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/13-intel-sysret/">intel sysret</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/14-runas/">runas</a></li>
+								
+									<li class="nav-item current"><a href="/4-win-privesc/15-LFI-FILES/">LFI files</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/16-UAC/">UAC bypass</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/17-llmnr/">LLMNR and NBT-NS poisoning</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/2-stored-credentials/">stored credentials</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/3-kernel/">Kernel Vulns</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/4-dll-injection/">DLL Injection</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/5-weak-service-permissions/">weak services</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/6-dll-hijacking/">DLL hijacking</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/7-potato/">POTATOS</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/8-group-policies-preferences/">group policy preferences</a></li>
+								
+									<li class="nav-item "><a href="/4-win-privesc/9-unquoted-service-path/">unquoted service path</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/4-2-linux-privesc/">linux privesc</a></li>
+								
+									<li class="nav-item "><a href="/5-linux-privesc/lin-security/">lin-security + GTFO bins</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/6-post-exploitation/4-0-windows-file-transfer/">post exploitation</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-0-windows-file-transfer/">windows file transfer</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4-3-passwords+hash_attacks/">passwords attacks</a></li>
+								
+									<li class="nav-item "><a href="/6-post-exploitation/4.4-pivoting+tunneling/">pivoting+tunneling</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/7-varios/tips/">varios</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/7-varios/tips/">tips</a></li>
+								
+							</ul>
+						</li>
+					
+						<li class="nav-item top-level ">
+							
+							<a href="/8-cheatsheets/msfvenom/">cheatsheets</a>
+							<ul>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/msfvenom/">msfvenom</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/nmap/">nmap</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/powershell/">powershell</a></li>
+								
+									<li class="nav-item "><a href="/8-cheatsheets/tmux/">tmux</a></li>
+								
+							</ul>
+						</li>
+					
+				</ul>
+
+				<ul>
+					<li class="nav-item top-level ">
+						
+						<a href="/changelog/"></a>
+					</li>
+				</ul>
+			</nav>
+		</header>
+
+		<section class="main">
+			<div class="page-header">
+				<h2>win privesc</h2>
+				<h3>LFI files</h3>
+			</div>
+			<article class="content">
+				<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\Apache\conf\httpd.conf
+C:\Apache\logs\access.log
+C:\Apache\logs\error.log
+C:\Apache2\conf\httpd.conf
+C:\Apache2\logs\access.log
+C:\Apache2\logs\error.log
+C:\Apache22\conf\httpd.conf
+C:\Apache22\logs\access.log
+C:\Apache22\logs\error.log
+C:\Apache24\conf\httpd.conf
+C:\Apache24\logs\access.log
+C:\Apache24\logs\error.log
+C:\Documents and Settings\Administrator\NTUser.dat
+C:\php\php.ini
+C:\php4\php.ini
+C:\php5\php.ini
+C:\php7\php.ini
+C:\Program Files (x86)\Apache Group\Apache\conf\httpd.conf
+C:\Program Files (x86)\Apache Group\Apache\logs\access.log
+C:\Program Files (x86)\Apache Group\Apache\logs\error.log
+C:\Program Files (x86)\Apache Group\Apache2\conf\httpd.conf
+C:\Program Files (x86)\Apache Group\Apache2\logs\access.log
+C:\Program Files (x86)\Apache Group\Apache2\logs\error.log
+c:\Program Files (x86)\php\php.ini
+C:\Program Files\Apache Group\Apache\conf\httpd.conf
+C:\Program Files\Apache Group\Apache\conf\logs\access.log
+C:\Program Files\Apache Group\Apache\conf\logs\error.log
+C:\Program Files\Apache Group\Apache2\conf\httpd.conf
+C:\Program Files\Apache Group\Apache2\conf\logs\access.log
+C:\Program Files\Apache Group\Apache2\conf\logs\error.log
+C:\Program Files\FileZilla Server\FileZilla Server.xml
+C:\Program Files\MySQL\my.cnf
+C:\Program Files\MySQL\my.ini
+C:\Program Files\MySQL\MySQL Server 5.0\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.0\my.ini
+C:\Program Files\MySQL\MySQL Server 5.1\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.1\my.ini
+C:\Program Files\MySQL\MySQL Server 5.5\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.5\my.ini
+C:\Program Files\MySQL\MySQL Server 5.6\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.6\my.ini
+C:\Program Files\MySQL\MySQL Server 5.7\my.cnf
+C:\Program Files\MySQL\MySQL Server 5.7\my.ini
+C:\Program Files\php\php.ini
+C:\Users\Administrator\NTUser.dat
+C:\Windows\debug\NetSetup.LOG
+C:\Windows\Panther\Unattend\Unattended.xml
+C:\Windows\Panther\Unattended.xml
+C:\Windows\php.ini
+C:\Windows\repair\SAM
+C:\Windows\repair\system
+C:\Windows\System32\config\AppEvent.evt
+C:\Windows\System32\config\RegBack\SAM
+C:\Windows\System32\config\RegBack\system
+C:\Windows\System32\config\SAM
+C:\Windows\System32\config\SecEvent.evt
+C:\Windows\System32\config\SysEvent.evt
+C:\Windows\System32\config\SYSTEM
+C:\Windows\System32\drivers\etc\hosts
+C:\Windows\System32\winevt\Logs\Application.evtx
+C:\Windows\System32\winevt\Logs\Security.evtx
+C:\Windows\System32\winevt\Logs\System.evtx
+C:\Windows\win.ini
+C:\xampp\apache\conf\extra\httpd-xampp.conf
+C:\xampp\apache\conf\httpd.conf
+C:\xampp\apache\logs\access.log
+C:\xampp\apache\logs\error.log
+C:\xampp\FileZillaFTP\FileZilla Server.xml
+C:\xampp\MercuryMail\MERCURY.INI
+C:\xampp\mysql\bin\my.ini
+C:\xampp\php\php.ini
+C:\xampp\security\webdav.htpasswd
+C:\xampp\sendmail\sendmail.ini
+C:\xampp\tomcat\conf\server.xml
+</code></pre></div></div>
+
+			</article>
+		</section>
+
+		<script>
+			document.getElementById("open-nav").addEventListener("click", function () {
+				document.body.classList.toggle("nav-open");
+			});
+		</script>
+	</body>
+</html>

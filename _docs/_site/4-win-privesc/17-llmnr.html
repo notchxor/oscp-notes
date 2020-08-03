@@ -1,0 +1,16 @@
+<hr />
+<p>Link-Local Multicast Name Resolution (LLMNR) and Netbios Name Service (NBT-NS) are two components of Microsoft Windows machines.  LLLMNR was introduced in Windows Vista and is the successor to NBT-NS.</p>
+
+<p>If one machine tries to resolve a particular host, but DNS resolution fails, the machine will then attempt to ask all other machines on the local network for the correct address via LLMNR or NBT-NS.</p>
+
+<h2 id="vulnerability">Vulnerability</h2>
+<ol>
+  <li>The victim machine wants to go the print server at \printserver, but mistakenly types in \pintserver.</li>
+  <li>The DNS server responds to the victim saying that it doesn’t know that host.</li>
+  <li>The victim then asks if there is anyone on the local network that knows the location of \pintserver</li>
+  <li>The attacker responds to the victim saying that it is the \pintserver</li>
+  <li>The victim believes the attacker and sends its own username and NTLMv2 hash to the attacker.</li>
+  <li>The attacker can now crack the hash to discover the password</li>
+</ol>
+
+<p>https://github.com/lgandx/Responder</p>

